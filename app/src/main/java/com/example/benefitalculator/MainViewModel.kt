@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.benefitalculator.domain.CalculatedData
+import java.lang.Exception
 
 class MainViewModel: ViewModel() {
 
@@ -33,5 +34,35 @@ class MainViewModel: ViewModel() {
         _calculateData.value = newCD
 
 
+    }
+
+    fun calculate(inputPrice: String?, inputWeight: String?) {
+        val price = parseData(inputPrice)
+        val weight = parseData(inputWeight)
+        val fieldsValid = validateInput(price, weight)
+        if (fieldsValid) {
+            getResult()
+        }
+    }
+
+    private fun parseData(input: String?): Double {
+        return try{
+            input?.trim()?.toDouble() ?: 0.0
+        } catch (e: Exception) {
+            0.0
+        }
+    }
+
+    private fun validateInput(price: Double, weight: Double): Boolean {
+        var result = true
+        if (price == 0.0) {
+            // TODO: show error
+            result = false
+        }
+        if (weight <= 0.0) {
+            // TODO: show error
+            result = false
+        }
+        return result
     }
 }

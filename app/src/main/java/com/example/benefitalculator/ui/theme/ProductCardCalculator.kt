@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedTextField
@@ -22,12 +23,14 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.benefitalculator.MainViewModel
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.CalculatedData
 
 @Composable
 fun ProductCardCalculator(
-    calcData: CalculatedData
+    calcData: CalculatedData,
+    viewModel: MainViewModel
 ) {
     val price = rememberSaveable { mutableStateOf("") }
     val weight = rememberSaveable { mutableStateOf("") }
@@ -53,7 +56,12 @@ fun ProductCardCalculator(
                 label = { Text(stringResource(R.string.product_card_calculate_weight_1)) },
                 singleLine = true,
                 modifier = Modifier.weight(1f),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardActions = KeyboardActions(onDone = {
+                    calcData.weight = weight.value
+                    calcData.price = price.value
+                    viewModel.getResult(calcData)
+                })
             )
             Spacer(modifier = Modifier.width(8.dp))
 

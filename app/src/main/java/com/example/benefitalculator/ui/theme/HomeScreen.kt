@@ -25,7 +25,7 @@ fun HomeScreen (
         }
     }) {
         LazyColumn(content = {
-            items (calculationDataList, key = { it.id }) { ProductCardCalculator(it) }
+            items (calculationDataList, key = { it.id }) { ProductCardCalculator(it, viewModel) }
         })
 
     }
