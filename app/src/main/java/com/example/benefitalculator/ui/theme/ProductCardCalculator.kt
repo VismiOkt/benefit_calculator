@@ -1,6 +1,7 @@
 package com.example.benefitalculator.ui.theme
 
 
+import android.view.KeyEvent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,18 +16,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.benefitalculator.MainViewModel
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.CalculatedData
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProductCardCalculator(
     calcData: CalculatedData,
@@ -34,6 +40,10 @@ fun ProductCardCalculator(
 ) {
     val price = rememberSaveable { mutableStateOf("") }
     val weight = rememberSaveable { mutableStateOf("") }
+    val (focusRequester1, focusRequester2) = FocusRequester.createRefs()
+    val result = remember {
+        mutableStateOf(calcData.resultPrice.toString())
+    }
 
 
     Card (modifier = Modifier.fillMaxWidth()) {
@@ -55,12 +65,17 @@ fun ProductCardCalculator(
                 onValueChange = { weight.value = it },
                 label = { Text(stringResource(R.string.product_card_calculate_weight_1)) },
                 singleLine = true,
-                modifier = Modifier.weight(1f),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.weight(1f).onKeyEvent {
+                    if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER){
+                        focusRequester2.requestFocus()
+                        true
+                    }
+                    false
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
-                    calcData.weight = weight.value
-                    calcData.price = price.value
-                    viewModel.getResult(calcData)
+                    focusRequester1.requestFocus()
+                    viewModel.calculate(price.value, weight.value, calcData)
                 })
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -71,7 +86,7 @@ fun ProductCardCalculator(
                     text = stringResource(id = R.string.product_card_calculate_result)
                 )
                 Text(
-                    text = calcData.resultPrice.toString(),
+                    text = result.value,
                     modifier = Modifier
 
                 )

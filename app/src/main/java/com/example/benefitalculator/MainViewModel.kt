@@ -15,17 +15,14 @@ class MainViewModel: ViewModel() {
     private val _calculateData = MutableLiveData<List<CalculatedData>>(listCalculateDate)
     val calculateData: LiveData<List<CalculatedData>> = _calculateData
 
-    fun getResult(calcD: CalculatedData) {
+    fun getResult(calcD: CalculatedData, price: Double, weight: Double) {
         val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
         val newCD = cD.apply {
             replaceAll {
                 if (it == calcD) {
-                    if (it.price != "" && it.weight != "") {
-                        it.copy(resultPrice = (it.price.toDouble() * 1.0) / it.weight.toDouble())
-                    } else {
-                        it
-                    }
-
+                    it.price = price
+                    it.weight = weight
+                        it.copy(resultPrice = (it.price * 1.0) / it.weight)
                 } else {
                     it
                 }
@@ -36,12 +33,12 @@ class MainViewModel: ViewModel() {
 
     }
 
-    fun calculate(inputPrice: String?, inputWeight: String?) {
+    fun calculate(inputPrice: String?, inputWeight: String?, calcD: CalculatedData) {
         val price = parseData(inputPrice)
         val weight = parseData(inputWeight)
         val fieldsValid = validateInput(price, weight)
         if (fieldsValid) {
-            getResult()
+            getResult(calcD, price, weight)
         }
     }
 

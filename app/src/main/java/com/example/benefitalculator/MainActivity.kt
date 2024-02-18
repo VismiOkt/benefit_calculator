@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import com.example.benefitalculator.ui.theme.BenefitСalculatorTheme
 import com.example.benefitalculator.ui.theme.HomeScreen
+import com.example.benefitalculator.ui.theme.Temp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +27,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen(viewModel)
+                    Temp()
+                   // HomeScreen(viewModel)
                 }
             }
         }
