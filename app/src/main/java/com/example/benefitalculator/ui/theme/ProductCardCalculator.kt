@@ -15,6 +15,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -23,11 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.benefitalculator.MainViewModel
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.CalculatedData
@@ -36,63 +39,80 @@ import com.example.benefitalculator.domain.CalculatedData
 @Composable
 fun ProductCardCalculator(
     calcData: CalculatedData,
-    viewModel: MainViewModel
+    errorInputPrice: () -> Boolean,
+    errorInputWeight: () -> Boolean,
+    resultCalculate: (String, String, CalculatedData) -> Unit,
+    resetErrorInputPrice: () -> Unit,
+    resetErrorInputWeight: () -> Unit
 ) {
+
     val price = rememberSaveable { mutableStateOf("") }
     val weight = rememberSaveable { mutableStateOf("") }
-    val (focusRequester1, focusRequester2) = FocusRequester.createRefs()
-    val result = remember {
-        mutableStateOf(calcData.resultPrice.toString())
-    }
 
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
 
-    Card (modifier = Modifier.fillMaxWidth()) {
-        Row (modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically) {
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             OutlinedTextField(
                 value = price.value,
-                onValueChange = { price.value = it },
+                onValueChange = {
+                    resetErrorInputPrice()
+                    price.value = it
+                },
+                isError = errorInputPrice(),
                 label = { Text(stringResource(R.string.product_card_calculate_price_1)) },
                 singleLine = true,
                 modifier = Modifier.weight(1f),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = {
+                    resultCalculate(price.value, weight.value, calcData)
+                })
             )
             Spacer(modifier = Modifier.width(8.dp))
             OutlinedTextField(
                 value = weight.value,
-                onValueChange = { weight.value = it },
-                label = { Text(stringResource(R.string.product_card_calculate_weight_1)) },
-                singleLine = true,
-                modifier = Modifier.weight(1f).onKeyEvent {
-                    if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER){
-                        focusRequester2.requestFocus()
-                        true
-                    }
-                    false
+                onValueChange = {
+                    resetErrorInputWeight()
+                    weight.value = it
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                label = { Text(stringResource(R.string.product_card_calculate_weight_1)) },
+                isError = errorInputWeight(),
+                singleLine = true,
+                modifier = Modifier.weight(1f),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
                 keyboardActions = KeyboardActions(onDone = {
-                    focusRequester1.requestFocus()
-                    viewModel.calculate(price.value, weight.value, calcData)
+                    resultCalculate(price.value, weight.value, calcData)
                 })
             )
             Spacer(modifier = Modifier.width(8.dp))
 
-            Column (modifier = Modifier.weight(2f),
-                horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.weight(2f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
                     text = stringResource(id = R.string.product_card_calculate_result)
                 )
+                val colorText = if (calcData.isBestPrice) Color.Green else Color.White
                 Text(
-                    text = result.value,
+                    text = calcData.resultPrice.toString(),
+                    fontSize = 20.sp,
+                    color = colorText,
                     modifier = Modifier
 
                 )
             }
         }
-
 
 
     }

@@ -4,5 +4,6 @@ data class CalculatedData(
     val id: Int,
     var price: Double = 0.0,
     var weight: Double = 0.0,
-    var resultPrice: Double = 0.0
+    var resultPrice: Double = 0.0,
+    var isBestPrice: Boolean = false
 )
