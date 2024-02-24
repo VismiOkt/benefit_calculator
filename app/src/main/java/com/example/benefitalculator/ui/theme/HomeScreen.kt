@@ -9,14 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissState
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -29,13 +26,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
 import com.example.benefitalculator.MainViewModel
 import com.example.benefitalculator.R
-import com.example.benefitalculator.domain.CalculatedData
-import java.nio.file.WatchEvent
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -45,8 +38,6 @@ fun HomeScreen(
 ) {
     val calculationDataList = viewModel.calculateData.observeAsState(listOf())
     val isLastCalcData = viewModel.isLastCalcData.observeAsState(false)
-    val errorInputPrice = viewModel.errorInputPrice.observeAsState(false)
-    val errorInputWeight = viewModel.errorInputWeight.observeAsState(false)
 
 
     Scaffold(
@@ -99,11 +90,9 @@ fun HomeScreen(
                     dismissContent = {
                         ProductCardCalculator(
                             calcData,
-                            errorInputPrice = { errorInputPrice.value },
-                            errorInputWeight = { errorInputWeight.value },
                             resultCalculate = { price, weight, calcData -> viewModel.calculate(price, weight, calcData) },
-                            resetErrorInputPrice = { viewModel.resetErrorInputPrice() },
-                            resetErrorInputWeight = { viewModel.resetErrorInputWeight() }
+                            resetErrorInputPrice = { viewModel.resetErrorInputPrice(calcData) },
+                            resetErrorInputWeight = { viewModel.resetErrorInputWeight(calcData) }
                         )
                     }
                 )

@@ -1,6 +1,5 @@
 package com.example.benefitalculator
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,12 +18,6 @@ class MainViewModel: ViewModel() {
 
     private val _calculateData = MutableLiveData<List<CalculatedData>>(listCalculateDate)
     val calculateData: LiveData<List<CalculatedData>> = _calculateData
-
-    private val _errorInputPrice = MutableLiveData<Boolean>()
-    val errorInputPrice: LiveData<Boolean> = _errorInputPrice
-
-    private val _errorInputWeight = MutableLiveData<Boolean>()
-    val errorInputWeight: LiveData<Boolean> = _errorInputWeight
 
     private val _isLastCalculateData = MutableLiveData<Boolean>()
     val isLastCalcData: LiveData<Boolean> = _isLastCalculateData
@@ -59,7 +52,7 @@ class MainViewModel: ViewModel() {
     fun calculate(inputPrice: String?, inputWeight: String?, calcD: CalculatedData) {
         val price = parseData(inputPrice)
         val weight = parseData(inputWeight)
-        val fieldsValid = validateInput(price, weight)
+        val fieldsValid = validateInput(price, weight, calcD)
         getResult(calcD, price, weight, fieldsValid)
         selectBestPrice()
 
@@ -88,26 +81,60 @@ class MainViewModel: ViewModel() {
         }
     }
 
-    private fun validateInput(price: Double, weight: Double): Boolean {
+    private fun validateInput(price: Double, weight: Double, calcD: CalculatedData): Boolean {
+        val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
         var result = true
-        if (price <= 0.0) {
-            _errorInputPrice.value = true
-            result = false
+        val newCD = cD.apply {
+            replaceAll {
+                if (calcD.id == it.id) {
+                    var errorPrice = false
+                    var errorWeight = false
+                    if (price <= 0.0) {
+                        errorPrice = true
+                        result = false
+                    }
+                    if (weight <= 0.0) {
+                        errorWeight = true
+                        result = false
+                    }
+                    it.copy(errorInputPrice = errorPrice, errorInputWeight = errorWeight)
+                } else {
+                    it
+                }
+            }
         }
-        if (weight <= 0.0) {
-            _errorInputWeight.value = true
-            result = false
-        }
+        _calculateData.value = newCD
         return result
     }
 
 
-    fun resetErrorInputPrice() {
-        _errorInputPrice.value = false
+    fun resetErrorInputPrice(calcD: CalculatedData) {
+        val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
+        val newCD = cD.apply {
+            replaceAll {
+                if (it.id == calcD.id) {
+                    it.copy(errorInputPrice = false)
+                } else {
+                    it
+                }
+            }
+        }
+        _calculateData.value = newCD
     }
 
-    fun resetErrorInputWeight() {
-        _errorInputWeight.value = false
+    fun resetErrorInputWeight(calcD: CalculatedData) {
+        val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
+        val newCD = cD.apply {
+            replaceAll {
+                if (it.id == calcD.id) {
+                    it.copy(errorInputWeight = false)
+                } else {
+                    it
+                }
+            }
+        }
+        _calculateData.value = newCD
+
     }
 
     fun addNewCalculateData() {
