@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.benefitalculator.domain.CalculatedData
 import java.lang.Exception
+import java.util.Collections.replaceAll
 import kotlin.math.roundToInt
 
 class MainViewModel: ViewModel() {
@@ -33,7 +34,7 @@ class MainViewModel: ViewModel() {
         val newCD = cD.apply {
             replaceAll {
                 if (it.id == calcD.id) {
-                    var resultPrice = 0.0
+                    var resultPrice: Double = 0.0
                     if (fieldValid) {
                         resultPrice = (((price * 1.0) / weight) * 100).roundToInt() / 100.0
                     }
@@ -60,17 +61,25 @@ class MainViewModel: ViewModel() {
     }
     private fun selectBestPrice() {
         val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
-        val h = cD.filter { it.resultPrice != 0.0 }.minBy { it.resultPrice }
-        val newCD = cD.apply {
-            replaceAll {
-                if (it.id == h.id) {
-                    it.copy(isBestPrice = true)
-                } else {
-                    it.copy(isBestPrice = false)
+        cD.onEach {
+            it.isBestPrice = false
+        }
+        try {
+            val min = cD.filter { it.resultPrice != 0.0 }.minBy { it.resultPrice }
+            val newCD = cD.apply {
+                replaceAll {
+                    if (it.id == min.id) {
+                        it.copy(isBestPrice = true)
+                    } else {
+                        it.copy(isBestPrice = false)
+                    }
                 }
             }
+            _calculateData.value = newCD
+        } catch (e: NoSuchElementException) {
+            return
         }
-        _calculateData.value = newCD
+
     }
 
     private fun parseData(input: String?): Double {
@@ -86,6 +95,7 @@ class MainViewModel: ViewModel() {
         var result = true
         val newCD = cD.apply {
             replaceAll {
+
                 if (calcD.id == it.id) {
                     var errorPrice = false
                     var errorWeight = false
