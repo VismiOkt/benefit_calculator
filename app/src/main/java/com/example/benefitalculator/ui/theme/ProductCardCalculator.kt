@@ -41,8 +41,10 @@ fun ProductCardCalculator(
     val price = rememberSaveable { mutableStateOf("") }
     val weight = rememberSaveable { mutableStateOf("") }
 
-    Card(modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+  //      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
+              ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

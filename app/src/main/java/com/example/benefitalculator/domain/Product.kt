@@ -1,8 +1,12 @@
 package com.example.benefitalculator.domain
 
 data class Product (
-    val id: Int,
+    var id: Int = UNDEFINED_ID,
     val name: String,
-    val calcData: List<CalculatedData>,
+  //  val calcData: List<CalculatedData>,
     val note: String
-)
+) {
+    companion object {
+        const val UNDEFINED_ID = -1
+    }
+}

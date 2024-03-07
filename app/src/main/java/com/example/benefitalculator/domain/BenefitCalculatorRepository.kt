@@ -3,13 +3,15 @@ package com.example.benefitalculator.domain
 import androidx.lifecycle.LiveData
 
 interface BenefitCalculatorRepository {
-    fun addProduct(product: Product)
+    suspend fun addProduct(product: Product, calcData: CalculatedData)
 
-    fun deleteProduct(product: Product)
+    suspend fun deleteProduct(product: Product)
 
-    fun editProduct(product: Product)
+    suspend fun editProduct(product: Product)
 
-    fun getProduct(productId: Int): Product
+    suspend fun getProduct(productId: Int): Product
 
     fun getProductList(): LiveData<List<Product>>
+
+    fun getCalcData(productId: Int): LiveData<List<CalculatedData>>
 }

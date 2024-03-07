@@ -12,19 +12,23 @@ import com.example.benefitalculator.domain.Product
 @Dao
 interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addProduct(product: ProductDbModel)
+    suspend fun addProduct(product: ProductDbModel, calcData: CalculatedDataDbModel)
 
     @Update
-    fun updateProduct(product: ProductDbModel)
+    suspend fun updateProduct(product: ProductDbModel)
 
     @Delete
-    fun deleteProduct(product: ProductDbModel)
+    suspend fun deleteProduct(product: ProductDbModel)
 
     @Query("SELECT * FROM product_table")
     fun getProductList(): LiveData<List<ProductDbModel>>
 
     @Query("SELECT * FROM product_table WHERE id=:productId LIMIT 1")
-    fun getProduct(productId: Int): ProductDbModel
+    suspend fun getProduct(productId: Int): ProductDbModel
+
+    @Query("SELECT * FROM calculated_data_table WHERE productId=:productId")
+    fun getCalcData(productId: Int): LiveData<List<CalculatedDataDbModel>>
+
 
 
 

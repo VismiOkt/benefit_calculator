@@ -163,4 +163,13 @@ class MainViewModel: ViewModel() {
         isLastCalculateData()
         selectBestPrice()
     }
+
+    fun resetAllCalculateData() {
+        val cD = mutableListOf<CalculatedData>().apply {
+                add(CalculatedData(count++))
+                add(CalculatedData(count++))
+            }
+        _calculateData.value = cD
+
+    }
 }

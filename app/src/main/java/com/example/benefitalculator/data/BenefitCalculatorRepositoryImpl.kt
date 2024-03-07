@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.example.benefitalculator.domain.BenefitCalculatorRepository
+import com.example.benefitalculator.domain.CalculatedData
 import com.example.benefitalculator.domain.Product
 
 class BenefitCalculatorRepositoryImpl(
@@ -13,23 +14,28 @@ class BenefitCalculatorRepositoryImpl(
     private val productDao = BenefitCalculatorDatabase.getInstance(application).productDao()
     private val mapper = ProductMapper()
 
-    override fun addProduct(product: Product) {
-        productDao.addProduct(product = mapper.mapEntityToDbModel(product))
+    override suspend fun addProduct(product: Product, calcData: CalculatedData) {
+        productDao.addProduct(product = mapper.mapEntityToDbModel(product), calcData = mapper.mapCalcDataEntityToDbModel(calcData))
     }
 
-    override fun deleteProduct(product: Product) {
+    override suspend fun deleteProduct(product: Product) {
         productDao.deleteProduct(product = mapper.mapEntityToDbModel(product))
     }
 
-    override fun editProduct(product: Product) {
+    override suspend fun editProduct(product: Product) {
         productDao.updateProduct(product = mapper.mapEntityToDbModel(product))
     }
 
-    override fun getProduct(productId: Int): Product {
+    override suspend fun getProduct(productId: Int): Product {
         val dbModel = productDao.getProduct(productId)
         return mapper.mapDbModeTolEntity(dbModel)
     }
 
-    override fun getProductList(): LiveData<List<Product>> = productDao.getProductList().map { mapper.mapListDbModelToListEntity(it) }
+    override fun getProductList(): LiveData<List<Product>> = productDao.getProductList().map {
+        mapper.mapListDbModelToListEntity(it)
+    }
 
+    override fun getCalcData(productId: Int): LiveData<List<CalculatedData>> = productDao.getCalcData(productId).map {
+        mapper.mapListCalcDataDbToListEntity(it)
+    }
 }
