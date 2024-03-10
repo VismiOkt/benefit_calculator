@@ -6,14 +6,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.benefitalculator.data.BenefitCalculatorRepositoryImpl
+import com.example.benefitalculator.domain.AddCalculatedListUseCase
 import com.example.benefitalculator.domain.AddProductUseCase
 import com.example.benefitalculator.domain.CalculatedData
 import com.example.benefitalculator.domain.DeleteProductUseCase
 import com.example.benefitalculator.domain.GetProductUseCase
 import com.example.benefitalculator.domain.Product
 import com.example.benefitalculator.domain.UpdateProductUseCase
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
@@ -24,8 +27,14 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     private val updateProductUseCase = UpdateProductUseCase(repository)
     private val deleteProductUseCase = DeleteProductUseCase(repository)
     private val addProductUseCase = AddProductUseCase(repository)
+    private val addCalculatedListUseCase = AddCalculatedListUseCase(repository)
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+    val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+        throwable.printStackTrace()
+    }
+
+
+    private val scope = CoroutineScope(Dispatchers.IO + coroutineExceptionHandler)
 
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData<Boolean> = _errorInputName
@@ -65,15 +74,16 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         val name = parseData(nameProduct)
         val note = parseData(noteProduct)
         if (validate(name)) {
+            var id = -1
             scope.launch {
                 val product = Product(name = name, note = note)
-                addProductUseCase.addProduct(product, calcData)
+                id = addProductUseCase.addProduct(product)
+                addCalculatedListUseCase.addCalculatedDataList(id, calcData)
 
             }
-
- //           finishWork()
+                //           finishWork()
+            }
         }
-    }
 
     fun parseData(input: String?): String {
         return input?.trim() ?: ""

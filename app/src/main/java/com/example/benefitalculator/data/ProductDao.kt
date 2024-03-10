@@ -12,7 +12,13 @@ import com.example.benefitalculator.domain.Product
 @Dao
 interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addProduct(product: ProductDbModel, calcData: CalculatedDataDbModel)
+    suspend fun addProduct(product: ProductDbModel): Long
+
+    @Insert
+    suspend fun addCalculatedData(calcData: List<CalculatedDataDbModel>)
+
+//    @Insert
+//    suspend fun addProductAndCalculatedData(product: ProductDbModel, calcData: List<CalculatedDataDbModel>)
 
     @Update
     suspend fun updateProduct(product: ProductDbModel)

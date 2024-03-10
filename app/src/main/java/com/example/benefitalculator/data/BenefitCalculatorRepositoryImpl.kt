@@ -14,8 +14,12 @@ class BenefitCalculatorRepositoryImpl(
     private val productDao = BenefitCalculatorDatabase.getInstance(application).productDao()
     private val mapper = ProductMapper()
 
-    override suspend fun addProduct(product: Product, calcData: CalculatedData) {
-        productDao.addProduct(product = mapper.mapEntityToDbModel(product), calcData = mapper.mapCalcDataEntityToDbModel(calcData))
+    override suspend fun addProduct(product: Product): Long {
+        return productDao.addProduct(product = mapper.mapEntityToDbModel(product))
+    }
+
+    override suspend fun addCalculatedData(calcData: List<CalculatedData>, productId: Int) {
+        productDao.addCalculatedData(calcData = mapper.mapListCalcDataEntityToListDb(calcData, productId))
     }
 
     override suspend fun deleteProduct(product: Product) {

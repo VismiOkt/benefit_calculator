@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.ir.types.impl.IrErrorClassImpl.metadata
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")

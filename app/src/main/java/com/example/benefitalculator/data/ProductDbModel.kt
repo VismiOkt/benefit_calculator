@@ -12,8 +12,6 @@ data class ProductDbModel(
     val id: Int,
     @ColumnInfo(name = "product_name")
     var name: String,
-   // @ColumnInfo(name = "product_calculated_data")
-  //  var calcData: List<CalculatedDataDbModel>,
     @ColumnInfo(name = "product_note")
     var note: String
 )
