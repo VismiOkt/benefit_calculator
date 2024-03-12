@@ -13,6 +13,15 @@ class ProductMapper {
         )
     }
 
+    fun mapEntityToDbModelEdit(product: Product): ProductDbModel {
+        return ProductDbModel(
+            id = product.id,
+            name = product.name,
+            note = product.note
+        )
+    }
+
+
     fun mapDbModeTolEntity(productDbModel: ProductDbModel): Product {
         return Product(
             id = productDbModel.id,
@@ -24,7 +33,7 @@ class ProductMapper {
     fun mapCalcDataEntityToDbModel(calcData: CalculatedData, productId: Int): CalculatedDataDbModel {
         return CalculatedDataDbModel(
             productId = productId,
-            id = calcData.id,
+            id = 0,
             price = calcData.price,
             weight = calcData.weight,
             resultPrice = calcData.resultPrice,
@@ -55,8 +64,5 @@ class ProductMapper {
         mapCalcDataEntityToDbModel(it, productId)
     }
 
-//    fun mapListCalcDataDbToArrayDb(list: List<CalculatedData>, productId: Int): Array<CalculatedDataDbModel> {
-//        return mapListCalcDataEntityToListDb(list, productId).toTypedArray()
-//    }
 
 }

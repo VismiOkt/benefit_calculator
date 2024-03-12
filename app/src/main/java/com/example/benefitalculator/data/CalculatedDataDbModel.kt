@@ -2,6 +2,7 @@ package com.example.benefitalculator.data
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.PrimaryKey
 
 @Entity (
@@ -10,12 +11,13 @@ import androidx.room.PrimaryKey
         entity = ProductDbModel::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("productId"),
-        onDelete = ForeignKey.CASCADE,
-        onUpdate = ForeignKey.CASCADE)]
+        onDelete = CASCADE,
+        onUpdate = CASCADE
+            )]
 )
 data class CalculatedDataDbModel(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    var id: Int,
     val productId: Int,
     var price: Double,
     var weight: Double,

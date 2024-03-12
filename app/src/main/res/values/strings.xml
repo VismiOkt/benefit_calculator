@@ -6,16 +6,16 @@
     <string name="home_screen_add_new_calculation">Add new calculation</string>
     <string name="home_screen_delete_calculation">Delete calculation</string>
     <string name="home_screen_delete_calculated">Удаление строки</string>
+    <string name="product_screen_delete_calculated">Удаление строки</string>
     <string name="home_screen_clear_all">Стереть всё</string>
     <string name="navigation_home">Главная</string>
     <string name="navigation_favorites">Избранное</string>
+    <string name="navigation_about">О программе</string>
     <string name="dialog_save_product_save">Сохранить</string>
     <string name="dialog_save_product_cancel">Отменить</string>
     <string name="dialog_save_product_title_save">Сохранить товар?</string>
     <string name="dialog_save_product_name">Имя</string>
     <string name="dialog_save_product_note">Примечание</string>
-
-
 
 
 </resources>

@@ -27,7 +27,7 @@ class BenefitCalculatorRepositoryImpl(
     }
 
     override suspend fun editProduct(product: Product) {
-        productDao.updateProduct(product = mapper.mapEntityToDbModel(product))
+        productDao.updateProduct(product = mapper.mapEntityToDbModelEdit(product))
     }
 
     override suspend fun getProduct(productId: Int): Product {
@@ -42,4 +42,8 @@ class BenefitCalculatorRepositoryImpl(
     override fun getCalcData(productId: Int): LiveData<List<CalculatedData>> = productDao.getCalcData(productId).map {
         mapper.mapListCalcDataDbToListEntity(it)
     }
+
+//    override suspend fun getCalculatedList(product: Product): LiveData<List<CalculatedData>> = productDao.getCalcData() {
+//        TODO("Not yet implemented")
+//    }
 }

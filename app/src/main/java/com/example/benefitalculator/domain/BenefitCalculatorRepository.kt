@@ -15,6 +15,8 @@ interface BenefitCalculatorRepository {
 
     suspend fun addCalculatedData(calcData: List<CalculatedData>, productId: Int)
 
+//    suspend fun getCalculatedList(product: Product): LiveData<List<CalculatedData>>
+
     fun getProductList(): LiveData<List<Product>>
 
     fun getCalcData(productId: Int): LiveData<List<CalculatedData>>

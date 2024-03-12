@@ -7,14 +7,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.benefitalculator.domain.Product
+
 
 @Dao
 interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addProduct(product: ProductDbModel): Long
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCalculatedData(calcData: List<CalculatedDataDbModel>)
 
 //    @Insert

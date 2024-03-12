@@ -9,7 +9,7 @@ import com.example.benefitalculator.domain.CalculatedData
 @Entity(tableName = "product_table")
 data class ProductDbModel(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     @ColumnInfo(name = "product_name")
     var name: String,
     @ColumnInfo(name = "product_note")
