@@ -21,4 +21,6 @@ interface BenefitCalculatorRepository {
 
     fun getCalcData(productId: Int): LiveData<List<CalculatedData>>
 
+    suspend fun getBestPrice(productId: Int): Double
+
 }

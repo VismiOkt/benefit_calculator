@@ -34,6 +34,7 @@ fun ProductListScreen (
 ) {
     val viewModel: ProductViewModel = viewModel()
     val productList = viewModel.productList.observeAsState(listOf())
+
     LazyColumn(
         contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -71,7 +72,9 @@ fun ProductListScreen (
                 },
                 dismissContent = {
                     ProductCard(
-                        product
+                        product,
+                        viewModel
+
                     )
 //                    ProductCardCalculator(
 //                        calcData,

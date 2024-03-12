@@ -1,5 +1,6 @@
 package com.example.benefitalculator.ui.theme
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,16 +20,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.benefitalculator.ProductViewModel
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.Product
 
 
 @Composable
 fun ProductCard(
-    product: Product
- //   calcData: CalculatedData,
+    product: Product,
+    viewModel: ProductViewModel
+    //   calcData: CalculatedData,
 //    resultCalculate: (String, String, CalculatedData) -> Unit,
 //    resetErrorInputPrice: (CalculatedData) -> Unit,
 //    resetErrorInputWeight: (CalculatedData) -> Unit
@@ -36,9 +42,15 @@ fun ProductCard(
 
     val price = rememberSaveable { mutableStateOf("") }
     val weight = rememberSaveable { mutableStateOf("") }
+    val isExpanded = rememberSaveable {
+        mutableStateOf(false)
+    }
+//    val bestPrice = viewModel.getBestPrice(product)
 
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().clickable {
+            isExpanded.value = !isExpanded.value
+        }
     ) {
         Row(
             modifier = Modifier
@@ -47,34 +59,45 @@ fun ProductCard(
 
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Outlined.List, contentDescription = "")
+            Column {
+                Row {
+                    Text(
+                        text = product.name,
+                        modifier = Modifier.weight(1f),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+//                    Column(
+//                        // modifier = Modifier.weight(2f),
+//                        horizontalAlignment = Alignment.CenterHorizontally
+//                    ) {
+//                        Text(
+//                            text = stringResource(id = R.string.product_card_calculate_result),
+//                            modifier = Modifier.width(95.dp)
+//                        )
+//                        Text(text = viewModel.bestPrice.toString(), color = Color.Green)
+
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Outlined.List, contentDescription = "")
+                    }
+
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Outlined.Edit, contentDescription = "")
+                    }
+                }
+                Row {
+                    Text(text = product.note, modifier = Modifier.clickable {
+                        isExpanded.value = !isExpanded.value
+                    },
+                        maxLines = if (isExpanded.value) 100 else 1)
+
+                }
             }
 
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Outlined.Edit, contentDescription = "")
-            }
-            Text(text = product.name, modifier = Modifier.weight(1f))
-            Spacer(modifier = Modifier.width(8.dp))
-            Column(
-               // modifier = Modifier.weight(2f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(id = R.string.product_card_calculate_result),
-                    modifier = Modifier.width(90.dp)
-                )
-//                val colorText = if (calcData.isBestPrice) Color.Green else Color.White
-//                Text(
-//                    text = calcData.resultPrice.toString(),
-//                    fontSize = 20.sp,
-//                    color = colorText,
-//                    modifier = Modifier
-//
-//                )
-            }
+
         }
 
-
     }
+
+
 }

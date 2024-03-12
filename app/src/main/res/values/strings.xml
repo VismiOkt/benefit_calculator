@@ -2,7 +2,7 @@
     <string name="app_name">BenefitСalculator</string>
     <string name="product_card_calculate_price_1">Цена </string>
     <string name="product_card_calculate_weight_1">Вес </string>
-    <string name="product_card_calculate_result">Стоимость за кг: </string>
+    <string name="product_card_calculate_result">Цена за кг: </string>
     <string name="home_screen_add_new_calculation">Add new calculation</string>
     <string name="home_screen_delete_calculation">Delete calculation</string>
     <string name="home_screen_delete_calculated">Удаление строки</string>

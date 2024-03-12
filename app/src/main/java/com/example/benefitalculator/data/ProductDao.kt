@@ -35,6 +35,9 @@ interface ProductDao {
     @Query("SELECT * FROM calculated_data_table WHERE productId=:productId")
     fun getCalcData(productId: Int): LiveData<List<CalculatedDataDbModel>>
 
+    @Query("SELECT * FROM calculated_data_table WHERE productId=:productId AND isBestPrice=true LIMIT 1")
+    fun getBestPrice(productId: Int): Double
+
 
 
 

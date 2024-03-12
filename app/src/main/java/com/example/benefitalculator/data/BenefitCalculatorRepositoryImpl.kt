@@ -43,7 +43,11 @@ class BenefitCalculatorRepositoryImpl(
         mapper.mapListCalcDataDbToListEntity(it)
     }
 
-//    override suspend fun getCalculatedList(product: Product): LiveData<List<CalculatedData>> = productDao.getCalcData() {
+    override suspend fun getBestPrice(productId: Int): Double {
+        return productDao.getBestPrice(productId)
+    }
+
+    //    override suspend fun getCalculatedList(product: Product): LiveData<List<CalculatedData>> = productDao.getCalcData() {
 //        TODO("Not yet implemented")
 //    }
 }

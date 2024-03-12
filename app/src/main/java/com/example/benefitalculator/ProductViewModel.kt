@@ -11,6 +11,7 @@ import com.example.benefitalculator.domain.AddCalculatedListUseCase
 import com.example.benefitalculator.domain.AddProductUseCase
 import com.example.benefitalculator.domain.CalculatedData
 import com.example.benefitalculator.domain.DeleteProductUseCase
+import com.example.benefitalculator.domain.GetBestPriceUseCase
 import com.example.benefitalculator.domain.GetCalculatedListUseCase
 import com.example.benefitalculator.domain.GetProductListUseCase
 import com.example.benefitalculator.domain.GetProductUseCase
@@ -33,6 +34,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val addCalculatedListUseCase = AddCalculatedListUseCase(repository)
     private val getProductListUseCase = GetProductListUseCase(repository)
     private val getCalculatedListUseCase = GetCalculatedListUseCase(repository)
+    private val getBestPriceUseCase = GetBestPriceUseCase(repository)
 
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData<Boolean> = _errorInputName
@@ -41,6 +43,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     val product: LiveData<Product> = _product
 
     val productList: LiveData<List<Product>> = getProductListUseCase.getProductList()
+
+//    private val _bestPrice = MutableLiveData<Double>()
+//    val bestPrice: LiveData<Double> = _bestPrice
 
   //  private val _calcDataListProduct = MutableLiveData<List<CalculatedData>>()
   //  val calcDataListProduct: LiveData<List<CalculatedData>> =
@@ -54,6 +59,14 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
             _product.value = prod
         }
 
+    }
+
+    fun getBestPrice(product: Product): String {
+        var bestPrice: Double = 0.0
+        viewModelScope.launch {
+            bestPrice = getBestPriceUseCase.getBestPrice(product.id)
+        }
+        return bestPrice.toString()
     }
 
     fun getCalcData(product: Product) {
@@ -72,6 +85,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                     updateProductUseCase.updateProduct(product)
                     addCalculatedListUseCase.addCalculatedDataList(product.id, calcData)
                 }
+
                 //              finishWork()
             }
 
