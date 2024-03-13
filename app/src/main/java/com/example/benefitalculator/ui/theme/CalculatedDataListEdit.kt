@@ -23,26 +23,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.benefitalculator.MainViewModel
 import com.example.benefitalculator.ProductViewModel
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.CalculatedData
+import com.example.benefitalculator.domain.Product
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CalculatedDataListEdit(
- //   viewModel: MainViewModel,
- //   calculationDataList: State<List<CalculatedData>>,
-
+    product: Product,
+    calculationDataList: LiveData<List<CalculatedData>>
     ) {
-    val viewModel: ProductViewModel = viewModel()
+    val viewModel: MainViewModel = viewModel()
     val calcDataList = viewModel.calcDataListProduct.observeAsState(listOf())
+
     LazyColumn(
         contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(calcDataList.value, key = { it.id }) { calcData ->
+        items(calculationDataList.value ?: mutableListOf(), key = { it.id }) { calcData ->
             val dismissState = rememberDismissState(
 //                confirmValueChange = {
 //                    !isLastCalcData.value

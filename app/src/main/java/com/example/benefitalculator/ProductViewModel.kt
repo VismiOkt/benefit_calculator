@@ -16,6 +16,7 @@ import com.example.benefitalculator.domain.GetProductListUseCase
 import com.example.benefitalculator.domain.GetProductUseCase
 import com.example.benefitalculator.domain.Product
 import com.example.benefitalculator.domain.UpdateProductUseCase
+import com.example.benefitalculator.ui.theme.ProductScreenState
 import kotlinx.coroutines.launch
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
@@ -30,13 +31,19 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val getCalculatedListUseCase = GetCalculatedListUseCase(repository)
     private val getBestPriceUseCase = GetBestPriceUseCase(repository)
 
+    val productList: LiveData<List<Product>> = getProductListUseCase.getProductList()
+    private val initialState = ProductScreenState.Products(productList)
+
+    private val _screenState = MutableLiveData<ProductScreenState>(initialState)
+    val screenState: LiveData<ProductScreenState> = _screenState
+
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData<Boolean> = _errorInputName
 
     private val _product = MutableLiveData<Product>()
     val product: LiveData<Product> = _product
 
-    val productList: LiveData<List<Product>> = getProductListUseCase.getProductList()
+
 
 //    private val _bestPrice = MutableLiveData<Double>()
 //    val bestPrice: LiveData<Double> = _bestPrice
@@ -47,6 +54,11 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
 //    private val _closeScreen = MutableLiveData<Unit>()
 //    val closeScreen: LiveData<Unit> = _closeScreen
+
+    fun showCalcData(product: Product) {
+        _screenState.value = ProductScreenState.CalcData(product, _calcDataListProduct)
+
+    }
 
     fun getProduct(productId: Int) {
         viewModelScope.launch {

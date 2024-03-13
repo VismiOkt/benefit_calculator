@@ -22,27 +22,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.benefitalculator.ProductViewModel
 import com.example.benefitalculator.R
+import com.example.benefitalculator.domain.Product
 import com.example.benefitalculator.navigation.Screen
 
 
 @Composable
-fun ProductListScreen (
+fun ProductListScreen(
 
 ) {
     val viewModel: ProductViewModel = viewModel()
-    val productList = viewModel.productList.observeAsState(listOf())
+    val screenState = viewModel.screenState.observeAsState(ProductScreenState.Initial)
 
+    when (val screenStateCurrent = screenState.value) {
+        is ProductScreenState.Products -> ProductList(screenStateCurrent.products, viewModel)
+        is ProductScreenState.CalcData -> CalculatedDataListEdit(screenStateCurrent.product, screenStateCurrent.calcData)
+        ProductScreenState.Initial -> { }
+    }
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ProductList(
-
+    productList2: LiveData<List<Product>>,
+    viewModel: ProductViewModel
 ) {
+    val productList = viewModel.productList.observeAsState(listOf())
     LazyColumn(
         contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -78,13 +87,9 @@ fun ProductList(
                     ProductCard(
                         product,
                         viewModel
-
                     )
-
                 }
             )
-
-
         }
     }
 }

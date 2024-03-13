@@ -69,7 +69,9 @@ fun ProductCard(
                     Spacer(modifier = Modifier.width(8.dp))
 
 
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        viewModel.showCalcData(product)
+                    }) {
                         Icon(Icons.Outlined.List, contentDescription = "")
                     }
 
