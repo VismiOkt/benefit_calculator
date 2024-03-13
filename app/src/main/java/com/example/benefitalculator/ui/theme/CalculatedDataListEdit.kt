@@ -17,44 +17,40 @@ import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.benefitalculator.MainViewModel
 import com.example.benefitalculator.ProductViewModel
 import com.example.benefitalculator.R
-import com.example.benefitalculator.navigation.Screen
-
-
-@Composable
-fun ProductListScreen (
-
-) {
-    val viewModel: ProductViewModel = viewModel()
-    val productList = viewModel.productList.observeAsState(listOf())
-
-
-}
+import com.example.benefitalculator.domain.CalculatedData
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun ProductList(
+fun CalculatedDataListEdit(
+ //   viewModel: MainViewModel,
+ //   calculationDataList: State<List<CalculatedData>>,
 
-) {
+    ) {
+    val viewModel: ProductViewModel = viewModel()
+    val calcDataList = viewModel.calcDataListProduct.observeAsState(listOf())
     LazyColumn(
         contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(productList.value, key = { it.id }) { product ->
-            val dismissState = rememberDismissState()
+        items(calcDataList.value, key = { it.id }) { calcData ->
+            val dismissState = rememberDismissState(
+//                confirmValueChange = {
+//                    !isLastCalcData.value
+//                }
+            )
             if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-                viewModel.deleteProduct(product)
+                viewModel.deleteCalculateData(calcData)
             }
-//            if (dismissState.isDismissed(DismissDirection.StartToEnd)) {
-//
-//            }
 
             SwipeToDismiss(
                 state = dismissState,
@@ -67,7 +63,7 @@ fun ProductList(
                             .fillMaxWidth()
                             .padding(16.dp)
                     ) {
-                        Text(text = stringResource(R.string.product_screen_delete_calculated))
+                        Text(text = stringResource(R.string.home_screen_delete_calculated))
                         Icon(
                             Icons.Rounded.Delete,
                             contentDescription = stringResource(R.string.home_screen_delete_calculation)
@@ -75,12 +71,18 @@ fun ProductList(
                     }
                 },
                 dismissContent = {
-                    ProductCard(
-                        product,
-                        viewModel
-
+                    ProductCardCalculator(
+                        calcData,
+                        resultCalculate = { price, weight, calcData ->
+                            viewModel.calculate(
+                                price,
+                                weight,
+                                calcData
+                            )
+                        },
+                        resetErrorInputPrice = { viewModel.resetErrorInputPrice(calcData) },
+                        resetErrorInputWeight = { viewModel.resetErrorInputWeight(calcData) }
                     )
-
                 }
             )
 

@@ -16,6 +16,7 @@
     <string name="dialog_save_product_title_save">Сохранить товар?</string>
     <string name="dialog_save_product_name">Имя</string>
     <string name="dialog_save_product_note">Примечание</string>
+    <string name="dialog_edit_product_title_save">Сохранить изменения?</string>
 
 
 </resources>

@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.benefitalculator.data.BenefitCalculatorRepositoryImpl
 import com.example.benefitalculator.domain.AddCalculatedListUseCase
@@ -17,11 +16,6 @@ import com.example.benefitalculator.domain.GetProductListUseCase
 import com.example.benefitalculator.domain.GetProductUseCase
 import com.example.benefitalculator.domain.Product
 import com.example.benefitalculator.domain.UpdateProductUseCase
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
@@ -47,8 +41,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 //    private val _bestPrice = MutableLiveData<Double>()
 //    val bestPrice: LiveData<Double> = _bestPrice
 
-  //  private val _calcDataListProduct = MutableLiveData<List<CalculatedData>>()
-  //  val calcDataListProduct: LiveData<List<CalculatedData>> =
+
+    private var _calcDataListProduct: LiveData<List<CalculatedData>> = MutableLiveData<List<CalculatedData>>()
+    val calcDataListProduct: LiveData<List<CalculatedData>> = _calcDataListProduct
 
 //    private val _closeScreen = MutableLiveData<Unit>()
 //    val closeScreen: LiveData<Unit> = _closeScreen
@@ -71,19 +66,20 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     fun getCalcData(product: Product) {
         val calcDataList = getCalculatedListUseCase.getCalculatedList(product)
-            //      _calcDataListProduct.value = calcDataList
+        _calcDataListProduct = calcDataList
     }
 
 
-    fun editProduct(nameProduct: String?, noteProduct: String?, calcData: List<CalculatedData>) {
+    fun editProduct(product: Product, nameProduct: String?, noteProduct: String?) {
+        getProduct(product.id)
         val name = parseData(nameProduct)
         val note = parseData(noteProduct)
         if (validate(name)) {
             _product.value?.let {
                 viewModelScope.launch {
-                    val product = it.copy(name = name, note = note)
-                    updateProductUseCase.updateProduct(product)
-                    addCalculatedListUseCase.addCalculatedDataList(product.id, calcData)
+                    val newProduct = it.copy(name = name, note = note)
+                    updateProductUseCase.updateProduct(newProduct)
+              //      addCalculatedListUseCase.addCalculatedDataList(product.id, calcData)
                 }
 
                 //              finishWork()

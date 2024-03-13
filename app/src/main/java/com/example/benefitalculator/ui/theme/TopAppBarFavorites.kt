@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,7 +32,7 @@ fun TopAppBarFavorites (
         },
         navigationIcon = {
             Icon(
-                Icons.Outlined.ArrowBack,
+                Icons.Outlined.FavoriteBorder,
                 contentDescription = "",
                 modifier = Modifier.width(32.dp)
             )

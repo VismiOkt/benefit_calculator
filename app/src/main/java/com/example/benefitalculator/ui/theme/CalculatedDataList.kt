@@ -29,7 +29,7 @@ import com.example.benefitalculator.domain.CalculatedData
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun CalculatedDataListScreen(
+fun CalculatedDataList(
     viewModel: MainViewModel,
     calculationDataList: State<List<CalculatedData>>,
 

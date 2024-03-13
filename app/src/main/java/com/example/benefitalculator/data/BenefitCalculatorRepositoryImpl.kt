@@ -23,7 +23,7 @@ class BenefitCalculatorRepositoryImpl(
     }
 
     override suspend fun deleteProduct(product: Product) {
-        productDao.deleteProduct(product = mapper.mapEntityToDbModel(product))
+        productDao.deleteProduct(product = mapper.mapEntityToDbModelEdit(product))
     }
 
     override suspend fun editProduct(product: Product) {
