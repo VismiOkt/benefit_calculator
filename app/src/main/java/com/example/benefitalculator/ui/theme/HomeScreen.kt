@@ -106,7 +106,7 @@ fun HomeScreen(
                 })
             },
             calcDataEditScreenContent = {
-                CalculatedDataListEdit(
+                CalculatedDataListEditScreen(
                     product = calcDataEditToProductList.value!!,
                     onBackPressed = {
                         calcDataEditToProductList.value = null

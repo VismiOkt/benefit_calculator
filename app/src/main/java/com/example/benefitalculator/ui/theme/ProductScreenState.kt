@@ -8,7 +8,7 @@ sealed class ProductScreenState(
 
 ) {
     data object Initial: ProductScreenState()
-    data class Products(val products: List<Product>) : ProductScreenState()
+    data class Products(val products: LiveData<List<Product>>) : ProductScreenState()
 
 
 

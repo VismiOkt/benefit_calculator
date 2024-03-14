@@ -17,7 +17,6 @@ import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,15 +26,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.benefitalculator.CalculatedDataEditViewModel
 import com.example.benefitalculator.CalculatedDataEditViewModelFactory
-import com.example.benefitalculator.MainViewModel
-import com.example.benefitalculator.ProductViewModel
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.CalculatedData
 import com.example.benefitalculator.domain.Product
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun CalculatedDataListEdit(
+fun CalculatedDataListEditScreen(
     product: Product,
     onBackPressed: () -> Unit
 ) {
@@ -45,41 +42,54 @@ fun CalculatedDataListEdit(
     val screenState = viewModel.screenState.observeAsState(CalculatedDataEditState.Initial)
     val currentState = screenState.value
     if (currentState is CalculatedDataEditState.CalcData) {
-        LazyColumn(
-            contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(currentState.calcData, key = { it.id }) { calcData ->
-                val dismissState = rememberDismissState(
+        CalculatedDataListEdit(
+            currentState.calcData
+
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Composable
+fun CalculatedDataListEdit(
+    calcData: LiveData<List<CalculatedData>>
+) {
+    val calcDataS = calcData.observeAsState(listOf())
+    LazyColumn(
+        contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(calcDataS.value, key = { it.id }) { calcData ->
+            val dismissState = rememberDismissState(
 //                confirmValueChange = {
 //                    !isLastCalcData.value
 //                }
-                )
-                if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-               //     viewModel.deleteCalculateData(calcData, product)
-                }
+            )
+            if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                //     viewModel.deleteCalculateData(calcData, product)
+            }
 
-                SwipeToDismiss(
-                    state = dismissState,
-                    modifier = Modifier.animateItemPlacement(),
-                    directions = setOf(DismissDirection.EndToStart),
-                    background = {
-                        Column(
-                            horizontalAlignment = Alignment.End,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        ) {
-                            Text(text = stringResource(R.string.home_screen_delete_calculated))
-                            Icon(
-                                Icons.Rounded.Delete,
-                                contentDescription = stringResource(R.string.home_screen_delete_calculation)
-                            )
-                        }
-                    },
-                    dismissContent = {
-                        ProductCardCalculator(
-                            calcData,
+            SwipeToDismiss(
+                state = dismissState,
+                modifier = Modifier.animateItemPlacement(),
+                directions = setOf(DismissDirection.EndToStart),
+                background = {
+                    Column(
+                        horizontalAlignment = Alignment.End,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text(text = stringResource(R.string.home_screen_delete_calculated))
+                        Icon(
+                            Icons.Rounded.Delete,
+                            contentDescription = stringResource(R.string.home_screen_delete_calculation)
+                        )
+                    }
+                },
+                dismissContent = {
+                    ProductCardCalculator(
+                        calcData,
 //                        resultCalculate = { price, weight, calcData ->
 //                            viewModel.calculate(
 //                                price,
@@ -89,15 +99,11 @@ fun CalculatedDataListEdit(
 //                        },
 //                        resetErrorInputPrice = { viewModel.resetErrorInputPrice(calcData) },
 //                        resetErrorInputWeight = { viewModel.resetErrorInputWeight(calcData) }
-                        )
-                    }
-                )
+                    )
+                }
+            )
 
 
-            }
         }
     }
-
-
-
 }

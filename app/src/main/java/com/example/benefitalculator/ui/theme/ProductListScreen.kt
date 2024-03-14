@@ -54,15 +54,16 @@ fun ProductListScreen(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ProductList(
-    productList: List<Product>,
+    productList: LiveData<List<Product>>,
     viewModel: ProductViewModel,
     onCalcDataEditListener: (Product) -> Unit
 ) {
+    val productListS = productList.observeAsState(listOf())
     LazyColumn(
         contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(productList, key = { it.id }) { product ->
+        items(productListS.value, key = { it.id }) { product ->
             val dismissState = rememberDismissState()
             if (dismissState.isDismissed(DismissDirection.EndToStart)) {
                 viewModel.deleteProduct(product)

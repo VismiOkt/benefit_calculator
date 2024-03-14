@@ -33,10 +33,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val getBestPriceUseCase = GetBestPriceUseCase(repository)
     private val deleteCalcDataUseCase = DeleteCalcDataUseCase(repository)
 
-//    val productList: LiveData<List<Product>> = getProductListUseCase.getProductList()
-//    private val initialState = ProductScreenState.Products(productList)
+    private val productList: LiveData<List<Product>> = getProductListUseCase.getProductList()
+    private val initialState = ProductScreenState.Products(productList)
 
-    private val _screenState = MutableLiveData<ProductScreenState>(ProductScreenState.Initial)
+    private val _screenState = MutableLiveData<ProductScreenState>(initialState)
     val screenState: LiveData<ProductScreenState> = _screenState
 
     private val _errorInputName = MutableLiveData<Boolean>()
@@ -45,15 +45,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val _product = MutableLiveData<Product>()
     val product: LiveData<Product> = _product
 
-    init {
-        getProductList()
-    }
-
-    fun getProductList() {
-        val temp = getProductListUseCase.getProductList()
-        val productList: List<Product> = temp.value ?: mutableListOf()
-        _screenState.value = ProductScreenState.Products(productList)
-    }
 
 
 

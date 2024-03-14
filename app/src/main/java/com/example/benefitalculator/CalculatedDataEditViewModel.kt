@@ -5,9 +5,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.benefitalculator.data.BenefitCalculatorRepositoryImpl
+import com.example.benefitalculator.domain.CalculatedData
 import com.example.benefitalculator.domain.GetCalculatedListUseCase
 import com.example.benefitalculator.domain.Product
 import com.example.benefitalculator.ui.theme.CalculatedDataEditState
+
 
 
 class CalculatedDataEditViewModel(
@@ -18,23 +20,14 @@ class CalculatedDataEditViewModel(
 
     private val getCalculatedListUseCase = GetCalculatedListUseCase(repository)
 
-    private val _screenState = MutableLiveData<CalculatedDataEditState>(CalculatedDataEditState.Initial)
+    private val calcDataList: LiveData<List<CalculatedData>> = getCalculatedListUseCase.getCalculatedList(product)
+    private val initialState = CalculatedDataEditState.CalcData(product, calcDataList)
+
+    private val _screenState = MutableLiveData<CalculatedDataEditState>(initialState)
     val screenState: LiveData<CalculatedDataEditState> = _screenState
 
-    init {
-        getCalcData(product)
-    }
 
-//    private var _calcDataListProduct: LiveData<List<CalculatedData>> = MutableLiveData<List<CalculatedData>>()
-//    val calcDataListProduct: LiveData<List<CalculatedData>> = _calcDataListProduct
 
-    private fun getCalcData(product: Product) {
-        val calcDataList = getCalculatedListUseCase.getCalculatedList(product).value ?: mutableListOf()
-        _screenState.value = CalculatedDataEditState.CalcData(
-            product,
-            calcDataList
-        )
-    }
 
 
 }

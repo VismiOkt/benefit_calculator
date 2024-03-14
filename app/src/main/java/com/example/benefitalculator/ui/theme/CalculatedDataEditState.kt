@@ -9,6 +9,6 @@ sealed class CalculatedDataEditState(
 ) {
     data object Initial: CalculatedDataEditState()
 
-    data class CalcData(val product: Product, val calcData: List<CalculatedData>) : CalculatedDataEditState()
+    data class CalcData(val product: Product, val calcData: LiveData<List<CalculatedData>>) : CalculatedDataEditState()
 
 }
