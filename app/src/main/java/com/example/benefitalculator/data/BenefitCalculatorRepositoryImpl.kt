@@ -47,7 +47,7 @@ class BenefitCalculatorRepositoryImpl(
         return productDao.getBestPrice(productId)
     }
 
-    //    override suspend fun getCalculatedList(product: Product): LiveData<List<CalculatedData>> = productDao.getCalcData() {
-//        TODO("Not yet implemented")
-//    }
+    override suspend fun deleteCalcData(calcDataId: Int, productId: Int) {
+        productDao.deleteCalcData(calcDataId, productId)
+    }
 }

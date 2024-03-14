@@ -16,7 +16,7 @@ sealed class Navigation (
     val icon: ImageVector
 ) {
     object Home : Navigation(titleId = R.string.navigation_home, screen = Screen.HomeScreen, icon = Icons.Outlined.Home)
-    object Favorites : Navigation(titleId = R.string.navigation_favorites, screen = Screen.ProductScreen, icon = Icons.Outlined.Favorite)
+    object Favorites : Navigation(titleId = R.string.navigation_favorites, screen = Screen.ProductListScreen, icon = Icons.Outlined.Favorite)
 
     object About : Navigation(titleId = R.string.navigation_about, screen = Screen.AboutScreen, icon = Icons.Outlined.Info)
 

@@ -4,12 +4,11 @@ import androidx.lifecycle.LiveData
 import com.example.benefitalculator.domain.CalculatedData
 import com.example.benefitalculator.domain.Product
 
-sealed class ProductScreenState(
+sealed class CalculatedDataEditState(
 
 ) {
-    data object Initial: ProductScreenState()
-    data class Products(val products: List<Product>) : ProductScreenState()
+    data object Initial: CalculatedDataEditState()
 
-
+    data class CalcData(val product: Product, val calcData: List<CalculatedData>) : CalculatedDataEditState()
 
 }

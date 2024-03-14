@@ -23,4 +23,6 @@ interface BenefitCalculatorRepository {
 
     suspend fun getBestPrice(productId: Int): Double
 
+    suspend fun deleteCalcData(calcDataId: Int, productId: Int)
+
 }

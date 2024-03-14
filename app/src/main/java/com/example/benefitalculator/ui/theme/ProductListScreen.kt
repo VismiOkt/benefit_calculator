@@ -32,14 +32,20 @@ import com.example.benefitalculator.navigation.Screen
 
 @Composable
 fun ProductListScreen(
+    onCalcDataEditListener: (Product) -> Unit
 
 ) {
     val viewModel: ProductViewModel = viewModel()
     val screenState = viewModel.screenState.observeAsState(ProductScreenState.Initial)
 
     when (val screenStateCurrent = screenState.value) {
-        is ProductScreenState.Products -> ProductList(screenStateCurrent.products, viewModel)
-        is ProductScreenState.CalcData -> CalculatedDataListEdit(screenStateCurrent.product, screenStateCurrent.calcData)
+        is ProductScreenState.Products -> {
+            ProductList(
+                screenStateCurrent.products,
+                viewModel,
+                onCalcDataEditListener
+            )
+        }
         ProductScreenState.Initial -> { }
     }
 
@@ -48,15 +54,15 @@ fun ProductListScreen(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ProductList(
-    productList2: LiveData<List<Product>>,
-    viewModel: ProductViewModel
+    productList: List<Product>,
+    viewModel: ProductViewModel,
+    onCalcDataEditListener: (Product) -> Unit
 ) {
-    val productList = viewModel.productList.observeAsState(listOf())
     LazyColumn(
         contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(productList.value, key = { it.id }) { product ->
+        items(productList, key = { it.id }) { product ->
             val dismissState = rememberDismissState()
             if (dismissState.isDismissed(DismissDirection.EndToStart)) {
                 viewModel.deleteProduct(product)
@@ -86,7 +92,8 @@ fun ProductList(
                 dismissContent = {
                     ProductCard(
                         product,
-                        viewModel
+                        viewModel,
+                        onCalcDataEditListener
                     )
                 }
             )

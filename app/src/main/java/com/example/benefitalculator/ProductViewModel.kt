@@ -9,6 +9,7 @@ import com.example.benefitalculator.data.BenefitCalculatorRepositoryImpl
 import com.example.benefitalculator.domain.AddCalculatedListUseCase
 import com.example.benefitalculator.domain.AddProductUseCase
 import com.example.benefitalculator.domain.CalculatedData
+import com.example.benefitalculator.domain.DeleteCalcDataUseCase
 import com.example.benefitalculator.domain.DeleteProductUseCase
 import com.example.benefitalculator.domain.GetBestPriceUseCase
 import com.example.benefitalculator.domain.GetCalculatedListUseCase
@@ -30,11 +31,12 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val getProductListUseCase = GetProductListUseCase(repository)
     private val getCalculatedListUseCase = GetCalculatedListUseCase(repository)
     private val getBestPriceUseCase = GetBestPriceUseCase(repository)
+    private val deleteCalcDataUseCase = DeleteCalcDataUseCase(repository)
 
-    val productList: LiveData<List<Product>> = getProductListUseCase.getProductList()
-    private val initialState = ProductScreenState.Products(productList)
+//    val productList: LiveData<List<Product>> = getProductListUseCase.getProductList()
+//    private val initialState = ProductScreenState.Products(productList)
 
-    private val _screenState = MutableLiveData<ProductScreenState>(initialState)
+    private val _screenState = MutableLiveData<ProductScreenState>(ProductScreenState.Initial)
     val screenState: LiveData<ProductScreenState> = _screenState
 
     private val _errorInputName = MutableLiveData<Boolean>()
@@ -43,22 +45,33 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val _product = MutableLiveData<Product>()
     val product: LiveData<Product> = _product
 
+    init {
+        getProductList()
+    }
+
+    fun getProductList() {
+        val temp = getProductListUseCase.getProductList()
+        val productList: List<Product> = temp.value ?: mutableListOf()
+        _screenState.value = ProductScreenState.Products(productList)
+    }
+
 
 
 //    private val _bestPrice = MutableLiveData<Double>()
 //    val bestPrice: LiveData<Double> = _bestPrice
 
 
-    private var _calcDataListProduct: LiveData<List<CalculatedData>> = MutableLiveData<List<CalculatedData>>()
-    val calcDataListProduct: LiveData<List<CalculatedData>> = _calcDataListProduct
+//    private var _calcDataListProduct: LiveData<List<CalculatedData>> = MutableLiveData<List<CalculatedData>>()
+//    val calcDataListProduct: LiveData<List<CalculatedData>> = _calcDataListProduct
 
 //    private val _closeScreen = MutableLiveData<Unit>()
 //    val closeScreen: LiveData<Unit> = _closeScreen
 
-    fun showCalcData(product: Product) {
-        _screenState.value = ProductScreenState.CalcData(product, _calcDataListProduct)
-
-    }
+//    fun showCalcData(product: Product) {
+//        getCalcData(product)
+//        _screenState.value = ProductScreenState.CalcData(product, calcDataListProduct)
+//
+//    }
 
     fun getProduct(productId: Int) {
         viewModelScope.launch {
@@ -76,10 +89,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         return bestPrice.toString()
     }
 
-    fun getCalcData(product: Product) {
-        val calcDataList = getCalculatedListUseCase.getCalculatedList(product)
-        _calcDataListProduct = calcDataList
-    }
+//    private fun getCalcData(product: Product) {
+//        val calcDataList = getCalculatedListUseCase.getCalculatedList(product)
+//        _calcDataListProduct = calcDataList
+//    }
 
 
     fun editProduct(product: Product, nameProduct: String?, noteProduct: String?) {
@@ -93,8 +106,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                     updateProductUseCase.updateProduct(newProduct)
               //      addCalculatedListUseCase.addCalculatedDataList(product.id, calcData)
                 }
-
-                //              finishWork()
             }
 
         }
@@ -138,8 +149,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         _errorInputName.value = false
     }
 
-    //    private fun finishWork() {
-//        _closeScreen.value = Unit
-//    }
+    fun deleteCalculateData(calcData: CalculatedData, product: Product) {
+        viewModelScope.launch {
+            deleteCalcDataUseCase.deleteCalcData(calcData.id, product.id)
+        }
+    }
 
 }

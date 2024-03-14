@@ -4,11 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.benefitalculator.domain.CalculatedData
+import com.example.benefitalculator.domain.ParseDataDoubleUseCase
 import java.lang.Exception
 import java.util.Collections.replaceAll
 import kotlin.math.roundToInt
 
 class MainViewModel: ViewModel() {
+
+    private val parseDataDoubleUseCase = ParseDataDoubleUseCase()
 
     private  var count: Int = 2
 
@@ -51,8 +54,8 @@ class MainViewModel: ViewModel() {
     }
 
     fun calculate(inputPrice: String?, inputWeight: String?, calcD: CalculatedData) {
-        val price = parseData(inputPrice)
-        val weight = parseData(inputWeight)
+        val price = parseDataDoubleUseCase.parseData(inputPrice)
+        val weight = parseDataDoubleUseCase.parseData(inputWeight)
         val fieldsValid = validateInput(price, weight, calcD)
         getResult(calcD, price, weight, fieldsValid)
         selectBestPrice()
@@ -80,14 +83,6 @@ class MainViewModel: ViewModel() {
             return
         }
 
-    }
-
-    private fun parseData(input: String?): Double {
-        return try{
-            input?.trim()?.toDouble() ?: 0.0
-        } catch (e: Exception) {
-            0.0
-        }
     }
 
     private fun validateInput(price: Double, weight: Double, calcD: CalculatedData): Boolean {

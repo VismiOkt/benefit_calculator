@@ -34,7 +34,8 @@ import com.example.benefitalculator.domain.Product
 @Composable
 fun ProductCard(
     product: Product,
-    viewModel: ProductViewModel
+    viewModel: ProductViewModel,
+    onCalcDataEditListener: (Product) -> Unit
 ) {
 
     val isExpanded = rememberSaveable {
@@ -70,7 +71,8 @@ fun ProductCard(
 
 
                     IconButton(onClick = {
-                        viewModel.showCalcData(product)
+                        onCalcDataEditListener(product)
+
                     }) {
                         Icon(Icons.Outlined.List, contentDescription = "")
                     }
