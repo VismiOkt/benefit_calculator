@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.State
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,17 +34,17 @@ import com.example.benefitalculator.domain.Product
 @Composable
 fun ProductCard(
     product: Product,
-    viewModel: ProductViewModel
-    //   calcData: CalculatedData,
-//    resultCalculate: (String, String, CalculatedData) -> Unit,
-//    resetErrorInputPrice: (CalculatedData) -> Unit,
-//    resetErrorInputWeight: (CalculatedData) -> Unit
+    viewModel: ProductViewModel,
+    onCalcDataEditListener: (Product) -> Unit
 ) {
 
-    val price = rememberSaveable { mutableStateOf("") }
-    val weight = rememberSaveable { mutableStateOf("") }
     val isExpanded = rememberSaveable {
         mutableStateOf(false)
+    }
+
+    val dialogEditState = remember { mutableStateOf(false) }
+    if (dialogEditState.value) {
+        DialogEditProduct(product, viewModel, dialogEditState)
     }
 //    val bestPrice = viewModel.getBestPrice(product)
 
@@ -67,21 +68,19 @@ fun ProductCard(
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-//                    Column(
-//                        // modifier = Modifier.weight(2f),
-//                        horizontalAlignment = Alignment.CenterHorizontally
-//                    ) {
-//                        Text(
-//                            text = stringResource(id = R.string.product_card_calculate_result),
-//                            modifier = Modifier.width(95.dp)
-//                        )
-//                        Text(text = viewModel.bestPrice.toString(), color = Color.Green)
 
-                    IconButton(onClick = { /*TODO*/ }) {
+
+                    IconButton(onClick = {
+                        onCalcDataEditListener(product)
+
+                    }) {
                         Icon(Icons.Outlined.List, contentDescription = "")
                     }
 
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        viewModel.getProduct(productId = product.id)
+                        dialogEditState.value = true
+                    }) {
                         Icon(Icons.Outlined.Edit, contentDescription = "")
                     }
                 }

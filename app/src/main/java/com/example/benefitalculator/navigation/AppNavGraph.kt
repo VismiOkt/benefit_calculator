@@ -9,8 +9,9 @@ import androidx.navigation.compose.composable
 fun AppNavGraph(
     navHostController: NavHostController,
     homeScreenContent: @Composable () -> Unit,
-    productScreenContent: @Composable () -> Unit,
-    aboutScreenContent: @Composable () -> Unit
+    productListScreenContent: @Composable () -> Unit,
+    aboutScreenContent: @Composable () -> Unit,
+    calcDataEditScreenContent: @Composable () -> Unit
 ) {
     NavHost(
         navController = navHostController,
@@ -21,11 +22,10 @@ fun AppNavGraph(
         ) {
             homeScreenContent()
         }
-        composable(
-            route = Screen.ProductScreen.route
-        ) {
-            productScreenContent()
-        }
+        productScreenNavGraph(
+            productListScreenContent,
+            calcDataEditScreenContent
+        )
         composable(
             route = Screen.AboutScreen.route
         ) {

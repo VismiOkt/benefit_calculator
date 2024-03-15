@@ -23,7 +23,7 @@ class BenefitCalculatorRepositoryImpl(
     }
 
     override suspend fun deleteProduct(product: Product) {
-        productDao.deleteProduct(product = mapper.mapEntityToDbModel(product))
+        productDao.deleteProduct(product = mapper.mapEntityToDbModelEdit(product))
     }
 
     override suspend fun editProduct(product: Product) {
@@ -47,7 +47,7 @@ class BenefitCalculatorRepositoryImpl(
         return productDao.getBestPrice(productId)
     }
 
-    //    override suspend fun getCalculatedList(product: Product): LiveData<List<CalculatedData>> = productDao.getCalcData() {
-//        TODO("Not yet implemented")
-//    }
+    override suspend fun deleteCalcData(calcDataId: Int, productId: Int) {
+        productDao.deleteCalcData(calcDataId, productId)
+    }
 }

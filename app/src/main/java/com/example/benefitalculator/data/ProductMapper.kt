@@ -41,7 +41,7 @@ class ProductMapper {
         )
     }
 
-    fun mapCalcDataDbToEntity(calcDataDb: CalculatedDataDbModel): CalculatedData {
+    private fun mapCalcDataDbToEntity(calcDataDb: CalculatedDataDbModel): CalculatedData {
         return CalculatedData(
             id = calcDataDb.id,
             price = calcDataDb.price,

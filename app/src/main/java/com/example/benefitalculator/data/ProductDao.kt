@@ -38,6 +38,9 @@ interface ProductDao {
     @Query("SELECT * FROM calculated_data_table WHERE productId=:productId AND isBestPrice=true LIMIT 1")
     fun getBestPrice(productId: Int): Double
 
+    @Query("DELETE FROM calculated_data_table WHERE productId=:productId AND id=:calcDataId")
+    fun deleteCalcData(calcDataId: Int, productId: Int)
+
 
 
 
