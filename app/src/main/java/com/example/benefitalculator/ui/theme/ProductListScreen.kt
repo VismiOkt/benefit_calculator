@@ -6,15 +6,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -24,12 +27,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.benefitalculator.MainViewModel
 import com.example.benefitalculator.ProductViewModel
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.Product
 import com.example.benefitalculator.navigation.Screen
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductListScreen(
     onCalcDataEditListener: (Product) -> Unit
@@ -48,6 +53,9 @@ fun ProductListScreen(
         }
         ProductScreenState.Initial -> { }
     }
+    TopAppBar(title = {
+        TopAppBarFavorites()
+    })
 
 }
 
@@ -100,4 +108,24 @@ fun ProductList(
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarFavorites (
+ //   viewModel: MainViewModel
+) {
+    TopAppBar(
+        title = {
+            Text(text = stringResource(R.string.navigation_favorites))
+
+        },
+        navigationIcon = {
+            Icon(
+                Icons.Outlined.FavoriteBorder,
+                contentDescription = "",
+                modifier = Modifier.width(32.dp)
+            )
+        }
+    )
 }

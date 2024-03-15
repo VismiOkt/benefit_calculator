@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.benefitalculator.MainViewModel
 import com.example.benefitalculator.R
@@ -36,38 +37,32 @@ fun HomeScreen(
         mutableStateOf(null)
     }
 
-    val dialogSaveState = remember { mutableStateOf(false) }
-    if (dialogSaveState.value) {
-        DialogSaveProduct(dialogSaveState, calculationDataList.value)
-    }
     val navigationState = rememberNavigationState()
     val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
     val currentRout = navBackStackEntry?.destination?.route
+
     Scaffold(
-        topBar = {
-            when (currentRout) {
-                Navigation.Home.screen.route -> TopAppBarHome(
-                    viewModel = viewModel,
-                    onClickSaveProduct = {
-                        dialogSaveState.value = true
-                    }
-                )
-
-                Navigation.Favorites.screen.route -> TopAppBarFavorites(viewModel = viewModel)
-            }
-        },
-
         bottomBar = {
             NavigationBar(modifier = Modifier.fillMaxWidth()) {
-                val items = listOf(Navigation.Home, Navigation.Favorites, Navigation.About)
+                val items = listOf(
+                    Navigation.Home,
+                    Navigation.Favorites,
+                    Navigation.About
+                )
                 items.forEach { item ->
+                    val selected = navBackStackEntry?.destination?.hierarchy?.any {
+                        it.route == item.screen.route
+                    } ?: false
                     NavigationBarItem(
-                        selected = currentRout == item.screen.route,
+                        selected = selected,
                         label = {
                             Text(text = stringResource(item.titleId))
                         },
                         onClick = {
-                            navigationState.navigateTo(item.screen.route)
+                            if (!selected) {
+                                navigationState.navigateTo(item.screen.route)
+                            }
+
                         },
                         icon = {
                             Icon(
@@ -82,11 +77,21 @@ fun HomeScreen(
         },
         floatingActionButton = {
             when (currentRout) {
-                Navigation.Home.screen.route -> FloatingActionButton(onClick = { viewModel.addNewCalculateData() }) {
-                    Icon(
-                        Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.home_screen_add_new_calculation)
-                    )
+                Screen.HomeScreen.route -> {
+                    FloatingActionButton(onClick = { viewModel.addNewCalculateData() }) {
+                        Icon(
+                            Icons.Rounded.Add,
+                            contentDescription = stringResource(R.string.home_screen_add_new_calculation)
+                        )
+                    }
+                }
+                Screen.CalcDataEditScreen.route -> {
+                    FloatingActionButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            Icons.Rounded.Add,
+                            contentDescription = stringResource(R.string.home_screen_add_new_calculation)
+                        )
+                    }
                 }
             }
 
@@ -102,14 +107,14 @@ fun HomeScreen(
             productListScreenContent = {
                 ProductListScreen(onCalcDataEditListener = {
                     calcDataEditToProductList.value = it
-                    navigationState.navigateTo(Screen.CalcDataEditScreen.route)
+                    navigationState.navigateToCalcDataEdit()
                 })
             },
             calcDataEditScreenContent = {
                 CalculatedDataListEditScreen(
                     product = calcDataEditToProductList.value!!,
                     onBackPressed = {
-                        calcDataEditToProductList.value = null
+                        navigationState.navHostController.popBackStack()
                     }
                 )
             },

@@ -12,9 +12,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,8 +32,9 @@ import androidx.compose.ui.unit.sp
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.CalculatedData
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductCardCalculator(
+fun ProductCardCalculator2(
     calcData: CalculatedData,
 //    resultCalculate: (String, String, CalculatedData) -> Unit,
 //    resetErrorInputPrice: (CalculatedData) -> Unit,
@@ -40,6 +43,7 @@ fun ProductCardCalculator(
 
     val price = rememberSaveable { mutableStateOf("") }
     val weight = rememberSaveable { mutableStateOf("") }
+
 
     Card(
         modifier = Modifier.fillMaxWidth(),

@@ -18,6 +18,10 @@ class NavigationState (
         }
     }
 
+    fun navigateToCalcDataEdit() {
+        navHostController.navigate(Screen.CalcDataEditScreen.route)
+    }
+
 }
 
 @Composable
