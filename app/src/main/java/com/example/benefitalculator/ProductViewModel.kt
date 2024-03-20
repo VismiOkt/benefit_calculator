@@ -31,7 +31,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val getProductListUseCase = GetProductListUseCase(repository)
     private val getCalculatedListUseCase = GetCalculatedListUseCase(repository)
     private val getBestPriceUseCase = GetBestPriceUseCase(repository)
-    private val deleteCalcDataUseCase = DeleteCalcDataUseCase(repository)
+
 
     private val productList: LiveData<List<Product>> = getProductListUseCase.getProductList()
     private val initialState = ProductScreenState.Products(productList)
@@ -72,13 +72,13 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     }
 
-    fun getBestPrice(product: Product): String {
-        var bestPrice: Double = 0.0
-        viewModelScope.launch {
-            bestPrice = getBestPriceUseCase.getBestPrice(product.id)
-        }
-        return bestPrice.toString()
-    }
+//    fun getBestPrice(product: Product): String {
+//        var bestPrice: Double = 0.0
+//        viewModelScope.launch {
+//            bestPrice = getBestPriceUseCase.getBestPrice(product.id)
+//        }
+//        return bestPrice.toString()
+//    }
 
 //    private fun getCalcData(product: Product) {
 //        val calcDataList = getCalculatedListUseCase.getCalculatedList(product)
@@ -140,10 +140,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         _errorInputName.value = false
     }
 
-    fun deleteCalculateData(calcData: CalculatedData, product: Product) {
-        viewModelScope.launch {
-            deleteCalcDataUseCase.deleteCalcData(calcData.id, product.id)
-        }
-    }
+
 
 }

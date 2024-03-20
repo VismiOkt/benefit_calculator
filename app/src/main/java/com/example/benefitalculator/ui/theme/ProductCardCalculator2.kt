@@ -10,18 +10,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -32,17 +26,14 @@ import androidx.compose.ui.unit.sp
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.CalculatedData
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductCardCalculator2(
     calcData: CalculatedData,
-//    resultCalculate: (String, String, CalculatedData) -> Unit,
-//    resetErrorInputPrice: (CalculatedData) -> Unit,
-//    resetErrorInputWeight: (CalculatedData) -> Unit
+    resultCalculate: (String, String, CalculatedData) -> Unit
 ) {
 
-    val price = rememberSaveable { mutableStateOf("") }
-    val weight = rememberSaveable { mutableStateOf("") }
+    val price = rememberSaveable { mutableStateOf(calcData.price.toString()) }
+    val weight = rememberSaveable { mutableStateOf(calcData.weight.toString()) }
 
 
     Card(
@@ -59,7 +50,6 @@ fun ProductCardCalculator2(
             OutlinedTextField(
                 value = price.value,
                 onValueChange = {
-                 //   resetErrorInputPrice(calcData)
                     price.value = it
                 },
                 isError = calcData.errorInputPrice,
@@ -71,14 +61,13 @@ fun ProductCardCalculator2(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = {
-                //    resultCalculate(price.value, weight.value, calcData)
+                    resultCalculate(price.value, weight.value, calcData)
                 })
             )
             Spacer(modifier = Modifier.width(8.dp))
             OutlinedTextField(
                 value = weight.value,
                 onValueChange = {
-            //        resetErrorInputWeight(calcData)
                     weight.value = it
                 },
                 label = { Text(stringResource(R.string.product_card_calculate_weight_1)) },
@@ -90,7 +79,7 @@ fun ProductCardCalculator2(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = {
-           //         resultCalculate(price.value, weight.value, calcData)
+                    resultCalculate(price.value, weight.value, calcData)
                 })
             )
             Spacer(modifier = Modifier.width(8.dp))

@@ -2,21 +2,24 @@ package com.example.benefitalculator.ui.theme
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.SwipeToDismiss
@@ -39,10 +42,10 @@ import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.CalculatedData
 import com.example.benefitalculator.domain.Product
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalculatedDataListEditScreen(
-    product: Product,
+  //  product: Product,
     onBackPressed: () -> Unit
 ) {
     val viewModel: CalculatedDataEditViewModel = viewModel(
@@ -51,34 +54,52 @@ fun CalculatedDataListEditScreen(
     val screenState = viewModel.screenState.observeAsState(CalculatedDataEditState.Initial)
     val currentState = screenState.value
     if (currentState is CalculatedDataEditState.CalcData) {
+        viewModel.initialList(product)
         CalculatedDataListEdit(
-            currentState.calcData
+            currentState.calcData,
+            viewModel
 
         )
     }
+    Box(modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        FloatingActionButton(modifier = Modifier.padding(bottom = 95.dp, end = 16.dp), onClick = {
+            viewModel.addNewCalculateData()
+        }) {
+            Icon(
+                Icons.Rounded.Add,
+                contentDescription = stringResource(R.string.home_screen_add_new_calculation)
+            )
+        }
+    }
     TopAppBar(title = {
-        TopAppBarCalcDataEdit(viewModel = viewModel)
+        TopAppBarCalcDataEdit(product, onBackPressed)
     })
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CalculatedDataListEdit(
-    calcData: LiveData<List<CalculatedData>>
+    calcDataList: LiveData<List<CalculatedData>>,
+    viewModel: CalculatedDataEditViewModel
 ) {
-    val calcDataS = calcData.observeAsState(listOf())
+    val calcDataLi = calcDataList.observeAsState(listOf())
+    val isLastCalcData = viewModel.isLastCalcData.observeAsState(false)
+
     LazyColumn(
         contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(calcDataS.value, key = { it.id }) { calcData ->
+        items(calcDataLi.value, key = { it.id }) { calcData ->
             val dismissState = rememberDismissState(
-//                confirmValueChange = {
-//                    !isLastCalcData.value
-//                }
+                confirmValueChange = {
+                    !isLastCalcData.value
+                }
             )
             if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-                //     viewModel.deleteCalculateData(calcData, product)
+                     viewModel.deleteCalculateData(calcData)
             }
 
             SwipeToDismiss(
@@ -102,15 +123,13 @@ fun CalculatedDataListEdit(
                 dismissContent = {
                     ProductCardCalculator2(
                         calcData,
-//                        resultCalculate = { price, weight, calcData ->
-//                            viewModel.calculate(
-//                                price,
-//                                weight,
-//                                calcData
-//                            )
-//                        },
-//                        resetErrorInputPrice = { viewModel.resetErrorInputPrice(calcData) },
-//                        resetErrorInputWeight = { viewModel.resetErrorInputWeight(calcData) }
+                        resultCalculate = { price, weight, calcData ->
+                            viewModel.calculate(
+                                price,
+                                weight,
+                                calcData
+                            )
+                        }
                     )
                 }
             )
@@ -123,35 +142,32 @@ fun CalculatedDataListEdit(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarCalcDataEdit(
-    viewModel: CalculatedDataEditViewModel
+    product: Product,
+    onBackPressed: () -> Unit
 
 ) {
     val dialogSaveState = remember { mutableStateOf(false) }
     if (dialogSaveState.value) {
-        //       DialogSaveProduct(dialogSaveState, calculationDataList.value)
+               DialogSaveCalculateData(dialogSaveState, product)
     }
     TopAppBar(
         title = {
-            Text(text = stringResource(R.string.navigation_home))
+            Text(text = product.name)
 
         },
         navigationIcon = {
-            Icon(
-                Icons.Outlined.Home,
-                contentDescription = "",
-                modifier = Modifier.width(32.dp)
-            )
-        },
-        actions = {
-            IconButton(
-                onClick = {
-                    //                 viewModel.resetAllCalculateData()
-                }
-            ) {
-                Icon(Icons.Outlined.Delete, contentDescription = stringResource(R.string.home_screen_clear_all))
+            IconButton(onClick = {
+                onBackPressed()
+            }) {
+                Icon(
+                    Icons.Outlined.ArrowBack,
+                    contentDescription = "",
+                    modifier = Modifier.width(32.dp)
+                )
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+        },
+        actions = {
             IconButton(
                 onClick = {
                     dialogSaveState.value = true
