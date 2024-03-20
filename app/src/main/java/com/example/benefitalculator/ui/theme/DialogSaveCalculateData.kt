@@ -38,7 +38,6 @@ fun DialogSaveCalculateData(
         title = {
             Column {
                 Text(text = stringResource(R.string.dialog_edit_product_title_save))
-
             }
         }
     )

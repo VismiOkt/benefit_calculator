@@ -27,12 +27,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.benefitalculator.MainViewModel
 import com.example.benefitalculator.ProductViewModel
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.Product
-import com.example.benefitalculator.navigation.Screen
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,12 +48,12 @@ fun ProductListScreen(
                 onCalcDataEditListener
             )
         }
-        ProductScreenState.Initial -> { }
+
+        ProductScreenState.Initial -> {}
     }
     TopAppBar(title = {
         TopAppBarFavorites()
     })
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -76,10 +73,6 @@ fun ProductList(
             if (dismissState.isDismissed(DismissDirection.EndToStart)) {
                 viewModel.deleteProduct(product)
             }
-//            if (dismissState.isDismissed(DismissDirection.StartToEnd)) {
-//
-//            }
-
             SwipeToDismiss(
                 state = dismissState,
                 modifier = Modifier.animateItemPlacement(),
@@ -112,13 +105,11 @@ fun ProductList(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarFavorites (
- //   viewModel: MainViewModel
+fun TopAppBarFavorites(
 ) {
     TopAppBar(
         title = {
             Text(text = stringResource(R.string.navigation_favorites))
-
         },
         navigationIcon = {
             Icon(

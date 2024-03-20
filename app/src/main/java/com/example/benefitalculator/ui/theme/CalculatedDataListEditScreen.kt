@@ -40,7 +40,6 @@ import com.example.benefitalculator.CalculatedDataEditViewModel
 import com.example.benefitalculator.CalculatedDataEditViewModelFactory
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.CalculatedData
-import com.example.benefitalculator.domain.Product
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

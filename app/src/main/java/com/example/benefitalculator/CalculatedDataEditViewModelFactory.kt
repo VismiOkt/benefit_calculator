@@ -3,7 +3,6 @@ package com.example.benefitalculator
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.benefitalculator.domain.Product
 
 class CalculatedDataEditViewModelFactory(
     private val productId: Int

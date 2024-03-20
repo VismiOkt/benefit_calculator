@@ -10,16 +10,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -43,8 +39,8 @@ fun ProductCardCalculator(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-  //      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
-              ) {
+        //      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -108,7 +104,5 @@ fun ProductCardCalculator(
                 )
             }
         }
-
-
     }
 }

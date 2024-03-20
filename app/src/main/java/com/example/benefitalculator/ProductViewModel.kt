@@ -9,10 +9,7 @@ import com.example.benefitalculator.data.BenefitCalculatorRepositoryImpl
 import com.example.benefitalculator.domain.AddCalculatedListUseCase
 import com.example.benefitalculator.domain.AddProductUseCase
 import com.example.benefitalculator.domain.CalculatedData
-import com.example.benefitalculator.domain.DeleteCalcDataUseCase
 import com.example.benefitalculator.domain.DeleteProductUseCase
-import com.example.benefitalculator.domain.GetBestPriceUseCase
-import com.example.benefitalculator.domain.GetCalculatedListUseCase
 import com.example.benefitalculator.domain.GetProductListUseCase
 import com.example.benefitalculator.domain.GetProductUseCase
 import com.example.benefitalculator.domain.Product
@@ -29,9 +26,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val addProductUseCase = AddProductUseCase(repository)
     private val addCalculatedListUseCase = AddCalculatedListUseCase(repository)
     private val getProductListUseCase = GetProductListUseCase(repository)
-    private val getCalculatedListUseCase = GetCalculatedListUseCase(repository)
-    private val getBestPriceUseCase = GetBestPriceUseCase(repository)
-
 
     private val productList: LiveData<List<Product>> = getProductListUseCase.getProductList()
     private val initialState = ProductScreenState.Products(productList)
@@ -45,25 +39,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val _product = MutableLiveData<Product>()
     val product: LiveData<Product> = _product
 
-
-
-
-//    private val _bestPrice = MutableLiveData<Double>()
-//    val bestPrice: LiveData<Double> = _bestPrice
-
-
-//    private var _calcDataListProduct: LiveData<List<CalculatedData>> = MutableLiveData<List<CalculatedData>>()
-//    val calcDataListProduct: LiveData<List<CalculatedData>> = _calcDataListProduct
-
-//    private val _closeScreen = MutableLiveData<Unit>()
-//    val closeScreen: LiveData<Unit> = _closeScreen
-
-//    fun showCalcData(product: Product) {
-//        getCalcData(product)
-//        _screenState.value = ProductScreenState.CalcData(product, calcDataListProduct)
-//
-//    }
-
     fun getProduct(productId: Int) {
         viewModelScope.launch {
             val prod = getProductUseCase.getProduct(productId)
@@ -71,20 +46,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
 
     }
-
-//    fun getBestPrice(product: Product): String {
-//        var bestPrice: Double = 0.0
-//        viewModelScope.launch {
-//            bestPrice = getBestPriceUseCase.getBestPrice(product.id)
-//        }
-//        return bestPrice.toString()
-//    }
-
-//    private fun getCalcData(product: Product) {
-//        val calcDataList = getCalculatedListUseCase.getCalculatedList(product)
-//        _calcDataListProduct = calcDataList
-//    }
-
 
     fun editProduct(product: Product, nameProduct: String?, noteProduct: String?) {
         getProduct(product.id)
@@ -95,7 +56,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                 viewModelScope.launch {
                     val newProduct = it.copy(name = name, note = note)
                     updateProductUseCase.updateProduct(newProduct)
-              //      addCalculatedListUseCase.addCalculatedDataList(product.id, calcData)
                 }
             }
 
@@ -135,11 +95,8 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-
     fun resetErrorInputName() {
         _errorInputName.value = false
     }
-
-
 
 }

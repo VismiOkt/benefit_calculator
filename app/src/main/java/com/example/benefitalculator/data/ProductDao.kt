@@ -20,9 +20,6 @@ interface ProductDao {
     @Update
     suspend fun updateProduct(product: ProductDbModel)
 
-//    @Query("UPDATE calculated_data_table WHERE productId=:productId")
-//    suspend fun updateCalculatedData(calcData: List<CalculatedDataDbModel>, productId: Int)
-
     @Delete
     suspend fun deleteProduct(product: ProductDbModel)
 
@@ -34,9 +31,6 @@ interface ProductDao {
 
     @Query("SELECT * FROM calculated_data_table WHERE productId=:productId")
     suspend fun getCalcData(productId: Int): List<CalculatedDataDbModel>
-
-//    @Query("SELECT * FROM calculated_data_table WHERE productId=:productId AND isBestPrice=true LIMIT 1")
-//    suspend fun getBestPrice(productId: Int): Double
 
     @Query("DELETE FROM calculated_data_table WHERE productId=:productId AND id=:calcDataId")
     suspend fun deleteCalcData(calcDataId: Int, productId: Int)

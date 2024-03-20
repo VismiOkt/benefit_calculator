@@ -14,22 +14,16 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.State
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.benefitalculator.ProductViewModel
-import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.Product
-
 
 @Composable
 fun ProductCard(
@@ -37,27 +31,25 @@ fun ProductCard(
     viewModel: ProductViewModel,
     onCalcDataEditListener: (Product) -> Unit
 ) {
-
     val isExpanded = rememberSaveable {
         mutableStateOf(false)
     }
-
     val dialogEditState = remember { mutableStateOf(false) }
     if (dialogEditState.value) {
         DialogEditProduct(product, viewModel, dialogEditState)
     }
-//    val bestPrice = viewModel.getBestPrice(product)
 
     Card(
-        modifier = Modifier.fillMaxWidth().clickable {
-            isExpanded.value = !isExpanded.value
-        }
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                isExpanded.value = !isExpanded.value
+            }
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
@@ -68,15 +60,11 @@ fun ProductCard(
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-
-
                     IconButton(onClick = {
                         onCalcDataEditListener(product)
-
                     }) {
                         Icon(Icons.Outlined.List, contentDescription = "")
                     }
-
                     IconButton(onClick = {
                         viewModel.getProduct(productId = product.id)
                         dialogEditState.value = true
@@ -85,18 +73,15 @@ fun ProductCard(
                     }
                 }
                 Row {
-                    Text(text = product.note, modifier = Modifier.clickable {
-                        isExpanded.value = !isExpanded.value
-                    },
-                        maxLines = if (isExpanded.value) 100 else 1)
+                    Text(
+                        text = product.note, modifier = Modifier.clickable {
+                            isExpanded.value = !isExpanded.value
+                        },
+                        maxLines = if (isExpanded.value) 100 else 1
+                    )
 
                 }
             }
-
-
         }
-
     }
-
-
 }

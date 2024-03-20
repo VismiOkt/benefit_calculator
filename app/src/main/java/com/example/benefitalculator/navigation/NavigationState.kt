@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.benefitalculator.domain.Product
 
-class NavigationState (
+class NavigationState(
     val navHostController: NavHostController
 ) {
     fun navigateTo(route: String) {

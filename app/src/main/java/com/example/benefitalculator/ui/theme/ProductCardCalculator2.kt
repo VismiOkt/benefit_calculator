@@ -38,8 +38,8 @@ fun ProductCardCalculator2(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-  //      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
-              ) {
+        //      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,7 +101,5 @@ fun ProductCardCalculator2(
                 )
             }
         }
-
-
     }
 }

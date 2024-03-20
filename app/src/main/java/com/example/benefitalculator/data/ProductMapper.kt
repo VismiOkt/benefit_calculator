@@ -30,7 +30,7 @@ class ProductMapper {
         )
     }
 
-    fun mapCalcDataEntityToDbModel(calcData: CalculatedData, productId: Int): CalculatedDataDbModel {
+    private fun mapCalcDataEntityToDbModel(calcData: CalculatedData, productId: Int): CalculatedDataDbModel {
         return CalculatedDataDbModel(
             productId = productId,
             id = 0,
@@ -57,9 +57,6 @@ class ProductMapper {
         mapDbModeTolEntity(it)
     }
 
-    fun mapListCalcDataDbToListEntity(list: List<CalculatedDataDbModel>) = list.map {
-        mapCalcDataDbToEntity(it)
-    }
 
     fun mapListCalcDataEntityToListDb(list: List<CalculatedData>, productId: Int) = list.map {
         mapCalcDataEntityToDbModel(it, productId)

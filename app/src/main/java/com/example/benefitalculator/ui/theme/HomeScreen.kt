@@ -55,7 +55,6 @@ fun HomeScreen(
                             if (!selected) {
                                 navigationState.navigateTo(item.screen.route)
                             }
-
                         },
                         icon = {
                             Icon(
@@ -64,7 +63,6 @@ fun HomeScreen(
                             )
                         }
                     )
-
                 }
             }
         },
@@ -78,9 +76,7 @@ fun HomeScreen(
                         )
                     }
                 }
-
             }
-
         }) {
         AppNavGraph(
             navHostController = navigationState.navHostController,
@@ -108,7 +104,5 @@ fun HomeScreen(
                 Text(text = "About program")
             }
         )
-
-
     }
 }

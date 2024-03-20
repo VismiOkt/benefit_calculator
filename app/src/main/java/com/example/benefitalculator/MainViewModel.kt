@@ -5,15 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.benefitalculator.domain.CalculatedData
 import com.example.benefitalculator.domain.ParseDataDoubleUseCase
-import java.lang.Exception
-import java.util.Collections.replaceAll
 import kotlin.math.roundToInt
 
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
     private val parseDataDoubleUseCase = ParseDataDoubleUseCase()
 
-    private  var count: Int = 2
+    private var count: Int = 2
 
     private val listCalculateDate = mutableListOf<CalculatedData>().apply {
         add(CalculatedData(0))
@@ -32,7 +30,12 @@ class MainViewModel: ViewModel() {
     }
 
 
-    private fun getResult(calcD: CalculatedData, price: Double, weight: Double, fieldValid: Boolean) {
+    private fun getResult(
+        calcD: CalculatedData,
+        price: Double,
+        weight: Double,
+        fieldValid: Boolean
+    ) {
         val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
         val newCD = cD.apply {
             replaceAll {
@@ -62,6 +65,7 @@ class MainViewModel: ViewModel() {
 
 
     }
+
     private fun selectBestPrice() {
         val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
         cD.onEach {
@@ -161,9 +165,9 @@ class MainViewModel: ViewModel() {
 
     fun resetAllCalculateData() {
         val cD = mutableListOf<CalculatedData>().apply {
-                add(CalculatedData(count++))
-                add(CalculatedData(count++))
-            }
+            add(CalculatedData(count++))
+            add(CalculatedData(count++))
+        }
         _calculateData.value = cD
 
     }

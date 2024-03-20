@@ -9,11 +9,8 @@ import com.example.benefitalculator.data.BenefitCalculatorRepositoryImpl
 import com.example.benefitalculator.domain.AddCalculatedListUseCase
 import com.example.benefitalculator.domain.CalculatedData
 import com.example.benefitalculator.domain.DeleteAllCalcDataUseCase
-import com.example.benefitalculator.domain.DeleteCalcDataUseCase
 import com.example.benefitalculator.domain.GetCalculatedListUseCase
 import com.example.benefitalculator.domain.ParseDataDoubleUseCase
-import com.example.benefitalculator.domain.Product
-import com.example.benefitalculator.domain.UpdateCalculatedListUseCase
 import com.example.benefitalculator.ui.theme.CalculatedDataEditState
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -28,10 +25,7 @@ class CalculatedDataEditViewModel(
 
     private val getCalculatedListUseCase = GetCalculatedListUseCase(repository)
     private val addCalculatedListUseCase = AddCalculatedListUseCase(repository)
-    private val deleteCalcDataUseCase = DeleteCalcDataUseCase(repository)
-    private val updateCalculatedListUseCase = UpdateCalculatedListUseCase(repository)
     private val deleteAllCalcDataUseCase = DeleteAllCalcDataUseCase(repository)
-
     private  var count: Int = 2
 
     private val _calculateData = MutableLiveData<List<CalculatedData>>(listOf())
