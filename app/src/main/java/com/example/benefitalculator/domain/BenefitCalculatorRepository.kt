@@ -1,11 +1,10 @@
 package com.example.benefitalculator.domain
 
 import androidx.lifecycle.LiveData
+import com.example.benefitalculator.data.CalculatedDataDbModel
 
 interface BenefitCalculatorRepository {
     suspend fun addProduct(product: Product): Long
-
-   // suspend fun addProductAndCalculatedData(product: Product, calcData: List<CalculatedData>)
 
     suspend fun deleteProduct(product: Product)
 
@@ -15,14 +14,19 @@ interface BenefitCalculatorRepository {
 
     suspend fun addCalculatedData(calcData: List<CalculatedData>, productId: Int)
 
+//    suspend fun updateCalculatedData(calcData: List<CalculatedData>, productId: Int)
+
 //    suspend fun getCalculatedList(product: Product): LiveData<List<CalculatedData>>
 
     fun getProductList(): LiveData<List<Product>>
 
-    fun getCalcData(productId: Int): LiveData<List<CalculatedData>>
+    suspend fun getCalcData(productId: Int): List<CalculatedData>
 
-    suspend fun getBestPrice(productId: Int): Double
+//    suspend fun getBestPrice(productId: Int): Double
 
     suspend fun deleteCalcData(calcDataId: Int, productId: Int)
+
+    suspend fun deleteAllCalcData(productId: Int)
+
 
 }

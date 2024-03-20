@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.benefitalculator.domain.Product
 
 class NavigationState (
     val navHostController: NavHostController
@@ -18,7 +19,7 @@ class NavigationState (
         }
     }
 
-    fun navigateToCalcDataEdit() {
+    fun navigateToCalcDataEdit(product: Product) {
         navHostController.navigate(Screen.CalcDataEditScreen.route)
     }
 

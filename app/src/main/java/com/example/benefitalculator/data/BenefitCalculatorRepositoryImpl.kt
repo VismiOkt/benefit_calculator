@@ -30,6 +30,14 @@ class BenefitCalculatorRepositoryImpl(
         productDao.updateProduct(product = mapper.mapEntityToDbModelEdit(product))
     }
 
+//    override suspend fun updateCalculatedData(calcData: List<CalculatedData>, productId: Int) {
+//        productDao.updateCalculatedData(calcData = mapper.mapListCalcDataEntityToListDb(calcData, productId))
+    //    }
+    override suspend fun deleteAllCalcData(productId: Int) {
+        productDao.deleteAllCalcData(productId)
+    }
+
+
     override suspend fun getProduct(productId: Int): Product {
         val dbModel = productDao.getProduct(productId)
         return mapper.mapDbModeTolEntity(dbModel)
@@ -39,13 +47,13 @@ class BenefitCalculatorRepositoryImpl(
         mapper.mapListDbModelToListEntity(it)
     }
 
-    override fun getCalcData(productId: Int): LiveData<List<CalculatedData>> = productDao.getCalcData(productId).map {
-        mapper.mapListCalcDataDbToListEntity(it)
+    override suspend fun getCalcData(productId: Int): List<CalculatedData> = productDao.getCalcData(productId).map {
+        mapper.mapCalcDataDbToEntity(it)
     }
 
-    override suspend fun getBestPrice(productId: Int): Double {
-        return productDao.getBestPrice(productId)
-    }
+//    override suspend fun getBestPrice(productId: Int): Double {
+//        return productDao.getBestPrice(productId)
+//    }
 
     override suspend fun deleteCalcData(calcDataId: Int, productId: Int) {
         productDao.deleteCalcData(calcDataId, productId)

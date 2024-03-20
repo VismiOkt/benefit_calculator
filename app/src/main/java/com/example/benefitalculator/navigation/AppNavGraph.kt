@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.benefitalculator.domain.Product
 
 @Composable
 fun AppNavGraph(
@@ -11,7 +12,7 @@ fun AppNavGraph(
     homeScreenContent: @Composable () -> Unit,
     productListScreenContent: @Composable () -> Unit,
     aboutScreenContent: @Composable () -> Unit,
-    calcDataEditScreenContent: @Composable () -> Unit
+    calcDataEditScreenContent: @Composable (Product) -> Unit
 ) {
     NavHost(
         navController = navHostController,

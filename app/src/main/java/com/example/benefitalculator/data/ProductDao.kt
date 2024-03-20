@@ -14,14 +14,14 @@ interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addProduct(product: ProductDbModel): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun addCalculatedData(calcData: List<CalculatedDataDbModel>)
-
-//    @Insert
-//    suspend fun addProductAndCalculatedData(product: ProductDbModel, calcData: List<CalculatedDataDbModel>)
 
     @Update
     suspend fun updateProduct(product: ProductDbModel)
+
+//    @Query("UPDATE calculated_data_table WHERE productId=:productId")
+//    suspend fun updateCalculatedData(calcData: List<CalculatedDataDbModel>, productId: Int)
 
     @Delete
     suspend fun deleteProduct(product: ProductDbModel)
@@ -33,13 +33,16 @@ interface ProductDao {
     suspend fun getProduct(productId: Int): ProductDbModel
 
     @Query("SELECT * FROM calculated_data_table WHERE productId=:productId")
-    fun getCalcData(productId: Int): LiveData<List<CalculatedDataDbModel>>
+    suspend fun getCalcData(productId: Int): List<CalculatedDataDbModel>
 
-    @Query("SELECT * FROM calculated_data_table WHERE productId=:productId AND isBestPrice=true LIMIT 1")
-    fun getBestPrice(productId: Int): Double
+//    @Query("SELECT * FROM calculated_data_table WHERE productId=:productId AND isBestPrice=true LIMIT 1")
+//    suspend fun getBestPrice(productId: Int): Double
 
     @Query("DELETE FROM calculated_data_table WHERE productId=:productId AND id=:calcDataId")
-    fun deleteCalcData(calcDataId: Int, productId: Int)
+    suspend fun deleteCalcData(calcDataId: Int, productId: Int)
+
+    @Query("DELETE FROM calculated_data_table WHERE productId=:productId")
+    suspend fun deleteAllCalcData(productId: Int)
 
 
 

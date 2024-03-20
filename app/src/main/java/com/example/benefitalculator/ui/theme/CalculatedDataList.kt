@@ -2,9 +2,11 @@ package com.example.benefitalculator.ui.theme
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -14,9 +16,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.SwipeToDismiss
@@ -46,7 +50,12 @@ fun CalculatedDataList(
     val isLastCalcData = viewModel.isLastCalcData.observeAsState(false)
 
     LazyColumn(
-        contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
+        contentPadding = PaddingValues(
+            start = 8.dp,
+            end = 8.dp,
+            top = 70.dp,
+            bottom = 88.dp
+        ),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(calculationDataList.value, key = { it.id }) { calcData ->
@@ -96,6 +105,22 @@ fun CalculatedDataList(
 
         }
     }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        FloatingActionButton(
+            modifier = Modifier.padding(bottom = 95.dp, end = 16.dp),
+            onClick = {
+                viewModel.addNewCalculateData()
+            }
+        ) {
+            Icon(
+                Icons.Rounded.Add,
+                contentDescription = stringResource(R.string.home_screen_add_new_calculation)
+            )
+        }
+    }
     TopAppBarHome(
         viewModel = viewModel,
         calculationDataList
@@ -104,11 +129,10 @@ fun CalculatedDataList(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarHome (
+fun TopAppBarHome(
     viewModel: MainViewModel,
     calculationDataList: State<List<CalculatedData>>,
 ) {
-    //   val calculationDataList = viewModel.calculateData.observeAsState(listOf())
     val dialogSaveState = remember { mutableStateOf(false) }
     if (dialogSaveState.value) {
         DialogSaveProduct(dialogSaveState, calculationDataList.value)
@@ -131,7 +155,10 @@ fun TopAppBarHome (
                     viewModel.resetAllCalculateData()
                 }
             ) {
-                Icon(Icons.Outlined.Delete, contentDescription = stringResource(R.string.home_screen_clear_all))
+                Icon(
+                    Icons.Outlined.Delete,
+                    contentDescription = stringResource(R.string.home_screen_clear_all)
+                )
             }
 
             Spacer(modifier = Modifier.width(8.dp))
