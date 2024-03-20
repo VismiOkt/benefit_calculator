@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 
 
 class CalculatedDataEditViewModel(
-  //  product: Product,
+    productId: Int,
     application: Application
 ) : AndroidViewModel(application) {
     private val repository = BenefitCalculatorRepositoryImpl(application)
@@ -37,7 +37,7 @@ class CalculatedDataEditViewModel(
     private val _calculateData = MutableLiveData<List<CalculatedData>>(listOf())
     val calculateData: LiveData<List<CalculatedData>> = _calculateData
 
-    private val initialState = CalculatedDataEditState.CalcData(product, _calculateData)
+    private val initialState = CalculatedDataEditState.CalcData(productId, _calculateData)
 
 
     private val _screenState = MutableLiveData<CalculatedDataEditState>(initialState)
@@ -47,9 +47,9 @@ class CalculatedDataEditViewModel(
     val isLastCalcData: LiveData<Boolean> = _isLastCalculateData
 
 
-    fun initialList(product: Product) {
+    fun initialList(productId: Int) {
         viewModelScope.launch {
-            _calculateData.value = getCalculatedListUseCase.getCalculatedList(product)
+            _calculateData.value = getCalculatedListUseCase.getCalculatedList(productId)
         }
     }
 
@@ -82,11 +82,11 @@ class CalculatedDataEditViewModel(
         selectBestPrice()
     }
 
-    fun saveChangesCalculationData(product: Product) {
+    fun saveChangesCalculationData(productId: Int) {
         val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
         viewModelScope.launch {
-            deleteAllCalcDataUseCase.deleteAllCalcData(product.id)
-            addCalculatedListUseCase.addCalculatedDataList(product.id, cD)
+            deleteAllCalcDataUseCase.deleteAllCalcData(productId)
+            addCalculatedListUseCase.addCalculatedDataList(productId, cD)
         }
     }
 

@@ -15,7 +15,7 @@ import com.example.benefitalculator.domain.Product
 @Composable
 fun DialogSaveCalculateData(
     dialogState: MutableState<Boolean>,
-    product: Product
+    productId: Int
 ) {
     val viewModel: CalculatedDataEditViewModel = viewModel()
 
@@ -24,7 +24,7 @@ fun DialogSaveCalculateData(
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.saveChangesCalculationData(product)
+                    viewModel.saveChangesCalculationData(productId)
                     dialogState.value = false
                 }
             ) {

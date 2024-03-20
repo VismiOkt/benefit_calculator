@@ -20,7 +20,7 @@ class NavigationState (
     }
 
     fun navigateToCalcDataEdit(product: Product) {
-        navHostController.navigate(Screen.CalcDataEditScreen.route)
+        navHostController.navigate(Screen.CalcDataEditScreen.getProductIdAndName(product))
     }
 
 }

@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.benefitalculator.domain.Product
 
 class CalculatedDataEditViewModelFactory(
-    private val product: Product
+    private val productId: Int
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return CalculatedDataEditViewModel(product = product, application = Application()) as T
+        return CalculatedDataEditViewModel(productId = productId, application = Application()) as T
     }
 }

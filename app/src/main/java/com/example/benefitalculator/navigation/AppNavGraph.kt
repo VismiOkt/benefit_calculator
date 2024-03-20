@@ -12,7 +12,7 @@ fun AppNavGraph(
     homeScreenContent: @Composable () -> Unit,
     productListScreenContent: @Composable () -> Unit,
     aboutScreenContent: @Composable () -> Unit,
-    calcDataEditScreenContent: @Composable (Product) -> Unit
+    calcDataEditScreenContent: @Composable (Int, String) -> Unit
 ) {
     NavHost(
         navController = navHostController,

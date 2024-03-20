@@ -45,16 +45,17 @@ import com.example.benefitalculator.domain.Product
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalculatedDataListEditScreen(
-  //  product: Product,
+    productId: Int,
+    productName: String,
     onBackPressed: () -> Unit
 ) {
     val viewModel: CalculatedDataEditViewModel = viewModel(
-        factory = CalculatedDataEditViewModelFactory(product)
+        factory = CalculatedDataEditViewModelFactory(productId)
     )
     val screenState = viewModel.screenState.observeAsState(CalculatedDataEditState.Initial)
     val currentState = screenState.value
     if (currentState is CalculatedDataEditState.CalcData) {
-        viewModel.initialList(product)
+        viewModel.initialList(productId)
         CalculatedDataListEdit(
             currentState.calcData,
             viewModel
@@ -74,7 +75,7 @@ fun CalculatedDataListEditScreen(
         }
     }
     TopAppBar(title = {
-        TopAppBarCalcDataEdit(product, onBackPressed)
+        TopAppBarCalcDataEdit(productId, productName, onBackPressed)
     })
 
 }
@@ -142,17 +143,18 @@ fun CalculatedDataListEdit(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarCalcDataEdit(
-    product: Product,
+    productId: Int,
+    productName: String,
     onBackPressed: () -> Unit
 
 ) {
     val dialogSaveState = remember { mutableStateOf(false) }
     if (dialogSaveState.value) {
-               DialogSaveCalculateData(dialogSaveState, product)
+               DialogSaveCalculateData(dialogSaveState, productId)
     }
     TopAppBar(
         title = {
-            Text(text = product.name)
+            Text(text = productName)
 
         },
         navigationIcon = {

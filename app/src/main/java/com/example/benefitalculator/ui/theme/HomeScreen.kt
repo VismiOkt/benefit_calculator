@@ -33,9 +33,6 @@ fun HomeScreen(
     viewModel: MainViewModel
 ) {
     val calculationDataList = viewModel.calculateData.observeAsState(listOf())
-//    val calcDataEditToProductList: MutableState<Product?> = remember {
-//        mutableStateOf(null)
-//    }
 
     val navigationState = rememberNavigationState()
     val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
@@ -99,13 +96,13 @@ fun HomeScreen(
             },
             productListScreenContent = {
                 ProductListScreen(onCalcDataEditListener = {
-        //            calcDataEditToProductList.value = it
                     navigationState.navigateToCalcDataEdit(it)
                 })
             },
-            calcDataEditScreenContent = { product ->
+            calcDataEditScreenContent = { productId, productName ->
                 CalculatedDataListEditScreen(
-                    product = product,
+                    productId = productId,
+                    productName = productName,
                     onBackPressed = {
                         navigationState.navHostController.popBackStack()
                     }

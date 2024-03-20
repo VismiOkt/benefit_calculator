@@ -8,7 +8,7 @@ import com.example.benefitalculator.domain.Product
 
 fun NavGraphBuilder.productScreenNavGraph(
     productListScreenContent: @Composable () -> Unit,
-    calcDataEditScreenContent: @Composable (Product) -> Unit
+    calcDataEditScreenContent: @Composable (Int, String) -> Unit
 ) {
     navigation(
         startDestination = Screen.ProductListScreen.route,
@@ -22,7 +22,15 @@ fun NavGraphBuilder.productScreenNavGraph(
         composable(
             route = Screen.CalcDataEditScreen.route
         ) {
-            calcDataEditScreenContent(Product(-2, "jk", "7878"))
+            val productIdString = it.arguments?.getString("product_id") ?: ""
+            val productName = it.arguments?.getString("product_name") ?: ""
+            var productId = -1
+            try {
+                productId = productIdString.toInt()
+            } catch (ex: Exception) {
+
+            }
+            calcDataEditScreenContent(productId, productName)
         }
     }
 
