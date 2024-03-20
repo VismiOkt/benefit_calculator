@@ -50,7 +50,9 @@ class CalculatedDataEditViewModel(
     fun initialList(productId: Int) {
         viewModelScope.launch {
             _calculateData.value = getCalculatedListUseCase.getCalculatedList(productId)
+            isLastCalculateData()
         }
+
     }
 
     private fun getResult(calcD: CalculatedData, price: Double, weight: Double, fieldValid: Boolean) {

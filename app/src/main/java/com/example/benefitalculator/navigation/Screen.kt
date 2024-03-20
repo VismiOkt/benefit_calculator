@@ -1,7 +1,5 @@
 package com.example.benefitalculator.navigation
 
-import androidx.compose.ui.res.stringResource
-import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.Product
 
 sealed class Screen(

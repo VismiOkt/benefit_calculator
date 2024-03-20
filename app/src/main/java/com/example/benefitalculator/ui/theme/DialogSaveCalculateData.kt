@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.benefitalculator.CalculatedDataEditViewModel
 import com.example.benefitalculator.R
-import com.example.benefitalculator.domain.Product
 
 @Composable
 fun DialogSaveCalculateData(

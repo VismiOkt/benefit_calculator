@@ -62,12 +62,15 @@ fun CalculatedDataListEditScreen(
 
         )
     }
-    Box(modifier = Modifier.fillMaxSize(),
+    Box(
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
-        FloatingActionButton(modifier = Modifier.padding(bottom = 95.dp, end = 16.dp), onClick = {
-            viewModel.addNewCalculateData()
-        }) {
+        FloatingActionButton(
+            modifier = Modifier.padding(bottom = 95.dp, end = 16.dp),
+            onClick = {
+                viewModel.addNewCalculateData()
+            }) {
             Icon(
                 Icons.Rounded.Add,
                 contentDescription = stringResource(R.string.home_screen_add_new_calculation)
@@ -100,7 +103,7 @@ fun CalculatedDataListEdit(
                 }
             )
             if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-                     viewModel.deleteCalculateData(calcData)
+                viewModel.deleteCalculateData(calcData)
             }
 
             SwipeToDismiss(
@@ -134,8 +137,6 @@ fun CalculatedDataListEdit(
                     )
                 }
             )
-
-
         }
     }
 }
@@ -150,7 +151,7 @@ fun TopAppBarCalcDataEdit(
 ) {
     val dialogSaveState = remember { mutableStateOf(false) }
     if (dialogSaveState.value) {
-               DialogSaveCalculateData(dialogSaveState, productId)
+        DialogSaveCalculateData(dialogSaveState, productId)
     }
     TopAppBar(
         title = {
