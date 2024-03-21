@@ -18,6 +18,7 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -99,13 +100,15 @@ fun CalculatedDataListEdit(
         items(calcDataLi.value, key = { it.id }) { calcData ->
             val dismissState = rememberDismissState(
                 confirmValueChange = {
-                    !isLastCalcData.value
+                    if (isLastCalcData.value) false
+                    else {
+                        if (it == DismissValue.DismissedToStart) {
+                            viewModel.deleteCalculateData(calcData)
+                            true
+                        } else false
+                    }
                 }
             )
-            if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-                viewModel.deleteCalculateData(calcData)
-            }
-
             SwipeToDismiss(
                 state = dismissState,
                 modifier = Modifier.animateItemPlacement(),
