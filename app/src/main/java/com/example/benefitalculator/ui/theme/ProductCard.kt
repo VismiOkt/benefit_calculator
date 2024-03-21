@@ -21,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.benefitalculator.ProductViewModel
 import com.example.benefitalculator.domain.Product
@@ -77,7 +78,8 @@ fun ProductCard(
                         text = product.note, modifier = Modifier.clickable {
                             isExpanded.value = !isExpanded.value
                         },
-                        maxLines = if (isExpanded.value) 100 else 1
+                        maxLines = if (isExpanded.value) 100 else 1,
+                        overflow = TextOverflow.Ellipsis
                     )
 
                 }

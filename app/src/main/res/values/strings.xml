@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BenefitСalculator</string>
+    <string name="app_name">Калькулятор выгоды</string>
     <string name="product_card_calculate_price_1">Цена </string>
     <string name="product_card_calculate_weight_1">Вес </string>
     <string name="product_card_calculate_result">Цена за кг: </string>

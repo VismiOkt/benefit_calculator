@@ -26,10 +26,9 @@ class CalculatedDataEditViewModel(
     private val getCalculatedListUseCase = GetCalculatedListUseCase(repository)
     private val addCalculatedListUseCase = AddCalculatedListUseCase(repository)
     private val deleteAllCalcDataUseCase = DeleteAllCalcDataUseCase(repository)
-    private  var count: Int = 2
 
     private val _calculateData = MutableLiveData<List<CalculatedData>>(listOf())
-    val calculateData: LiveData<List<CalculatedData>> = _calculateData
+//    val calculateData: LiveData<List<CalculatedData>> = _calculateData
 
     private val initialState = CalculatedDataEditState.CalcData(productId, _calculateData)
 
@@ -66,8 +65,6 @@ class CalculatedDataEditViewModel(
             }
         }
         _calculateData.value = newCD
-
-
     }
 
     fun calculate(inputPrice: String?, inputWeight: String?, calcD: CalculatedData) {
@@ -136,39 +133,10 @@ class CalculatedDataEditViewModel(
         return result
     }
 
-
-    fun resetErrorInputPrice(calcD: CalculatedData) {
-        val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
-        val newCD = cD.apply {
-            replaceAll {
-                if (it.id == calcD.id) {
-                    it.copy(errorInputPrice = false)
-                } else {
-                    it
-                }
-            }
-        }
-        _calculateData.value = newCD
-    }
-
-    fun resetErrorInputWeight(calcD: CalculatedData) {
-        val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
-        val newCD = cD.apply {
-            replaceAll {
-                if (it.id == calcD.id) {
-                    it.copy(errorInputWeight = false)
-                } else {
-                    it
-                }
-            }
-        }
-        _calculateData.value = newCD
-
-    }
-
     fun addNewCalculateData() {
         val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
-        cD.add(CalculatedData(id = count++))
+        val id = cD.last().id
+        cD.add(CalculatedData(id = id + 1))
         _calculateData.value = cD
         isLastCalculateData()
     }

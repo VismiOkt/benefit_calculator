@@ -1,6 +1,7 @@
 package com.example.benefitalculator.ui.theme
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -10,7 +11,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.benefitalculator.ProductViewModel
 import com.example.benefitalculator.R
@@ -26,13 +29,16 @@ fun DialogSaveProduct(
     val noteProduct = rememberSaveable { mutableStateOf("") }
     val errorInputName = viewModel.errorInputName.observeAsState(false)
 
+    val maxName = 100
+    val maxNote = 350
+
     AlertDialog(
         onDismissRequest = { dialogState.value = false },
         confirmButton = {
             TextButton(
                 onClick = {
                     viewModel.addProduct(nameProduct.value, noteProduct.value, calcData)
-                    if(!errorInputName.value) dialogState.value = false
+                    if (!errorInputName.value) dialogState.value = false
                 }
             ) {
                 Text(text = stringResource(R.string.dialog_save_product_save))
@@ -50,16 +56,31 @@ fun DialogSaveProduct(
                     value = nameProduct.value,
                     isError = errorInputName.value,
                     onValueChange = {
+                        if (it.length <= maxName) nameProduct.value = it
                         viewModel.resetErrorInputName()
-                        nameProduct.value = it
                     },
                     label = {
                         Text(text = stringResource(R.string.dialog_save_product_name))
+                    },
+                    supportingText = {
+                        Text(
+                            text = "${nameProduct.value.length} / $maxName",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.End,
+                        )
                     }
                 )
-                TextField(value = noteProduct.value, onValueChange = {
-                    noteProduct.value = it
-                },
+                TextField(value = noteProduct.value,
+                    onValueChange = {
+                        if (it.length <= maxName) noteProduct.value = it
+                    },
+                    supportingText = {
+                        Text(
+                            text = "${noteProduct.value.length} / $maxNote",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.End,
+                        )
+                    },
                     label = {
                         Text(text = stringResource(R.string.dialog_save_product_note))
                     }
