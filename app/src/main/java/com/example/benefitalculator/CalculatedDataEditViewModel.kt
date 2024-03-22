@@ -53,7 +53,7 @@ class CalculatedDataEditViewModel(
         val newCD = cD.apply {
             replaceAll {
                 if (it.id == calcD.id) {
-                    var resultPrice: Double = 0.0
+                    var resultPrice = 0.0
                     if (fieldValid) {
                         resultPrice = (((price * 1.0) / weight) * 100).roundToInt() / 100.0
                     }

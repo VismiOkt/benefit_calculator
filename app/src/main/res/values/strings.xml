@@ -17,6 +17,11 @@
     <string name="dialog_save_product_name">Имя</string>
     <string name="dialog_save_product_note">Примечание</string>
     <string name="dialog_edit_product_title_save">Сохранить изменения?</string>
+    <string name="about_program_screen_title">О приложении</string>
+    <string name="about_program_screen_description">Данное приложение позволяет быстро рассчитывать наиболее выгодный вариант фасовки продукта, а также сохранять в избранное часто используемые расчеты.</string>
+    <string name="about_program_screen_feedback">Обратная связь: vismiokt@mail.ru</string>
+    <string name="about_program_screen_author">Поддержать автора: </string>
+    <string name="about_program_screen_author2">    карта "Тинькофф" 2200 7010 5586 5361</string>
 
 
 </resources>

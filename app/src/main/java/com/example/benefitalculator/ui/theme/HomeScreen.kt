@@ -101,7 +101,8 @@ fun HomeScreen(
                 )
             },
             aboutScreenContent = {
-                Text(text = "About program")
+                AboutProgramScreen()
+
             }
         )
     }
