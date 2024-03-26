@@ -1,5 +1,6 @@
 package com.example.benefitalculator.ui.theme
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,10 +43,11 @@ fun ProductCard(
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
             .clickable {
                 isExpanded.value = !isExpanded.value
             }
+            .fillMaxWidth()
+            .animateContentSize()
     ) {
         Row(
             modifier = Modifier

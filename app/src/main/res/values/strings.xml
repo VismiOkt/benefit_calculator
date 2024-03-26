@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Калькулятор выгоды</string>
     <string name="product_card_calculate_price_1">Цена </string>
-    <string name="product_card_calculate_weight_1">Вес </string>
+    <string name="product_card_calculate_weight_1">Вес, кг </string>
     <string name="product_card_calculate_result">Цена за кг: </string>
     <string name="home_screen_add_new_calculation">Add new calculation</string>
     <string name="home_screen_delete_calculation">Delete calculation</string>
@@ -20,8 +20,10 @@
     <string name="about_program_screen_title">О приложении</string>
     <string name="about_program_screen_description">Данное приложение позволяет быстро рассчитывать наиболее выгодный вариант фасовки продукта, а также сохранять в избранное часто используемые расчеты.</string>
     <string name="about_program_screen_feedback">Обратная связь: vismiokt@mail.ru</string>
-    <string name="about_program_screen_author">Поддержать автора: </string>
-    <string name="about_program_screen_author2">    карта "Тинькофф" 2200 7010 5586 5361</string>
+    <string name="about_program_screen_author_ti">Поддержать автора (Тинькофф)</string>
+    <string name="about_program_screen_author_sb">Поддержать автора (Сбербанк)</string>
+    <string name="about_program_screen_version">Версия: 1.0</string>
+    <string name="about_program_screen_copy">Номер карты скопирован</string>
 
 
 </resources>
