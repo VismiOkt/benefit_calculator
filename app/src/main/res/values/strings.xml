@@ -19,11 +19,16 @@
     <string name="dialog_edit_product_title_save">Сохранить изменения?</string>
     <string name="about_program_screen_title">О приложении</string>
     <string name="about_program_screen_description">Данное приложение позволяет быстро рассчитывать наиболее выгодный вариант фасовки продукта, а также сохранять в избранное часто используемые расчеты.</string>
-    <string name="about_program_screen_feedback">Обратная связь: vismiokt@mail.ru</string>
+    <string name="about_program_screen_feedback">Обратная связь: </string>
     <string name="about_program_screen_author_ti">Поддержать автора (Тинькофф)</string>
     <string name="about_program_screen_author_sb">Поддержать автора (Сбербанк)</string>
+    <string name="about_program_screen_email">vismiokt@mail.ru</string>
+    <string name="about_program_screen_email_subject">Отзыв о программе "Калькулятор выгоды"</string>
+    <string name="about_program_screen_email_copy">Email скопирован</string>
     <string name="about_program_screen_version">Версия: 1.0</string>
     <string name="about_program_screen_copy">Номер карты скопирован</string>
+    <string name="about_program_screen_card_tinkoff">https://www.tinkoff.ru/rm/strekalova.viktoriya8/57dMQ77598/</string>
+    <string name="about_program_screen_card_sberbank">https://www.sberbank.com/sms/pbpn?requisiteNumber=79191931344</string>
 
 
 </resources>
