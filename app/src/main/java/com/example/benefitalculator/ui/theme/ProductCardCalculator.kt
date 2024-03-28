@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +21,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -39,7 +44,8 @@ fun ProductCardCalculator(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        //      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
+        colors = if (calcData.isBestPrice) CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer) else CardDefaults.cardColors()
+
     ) {
         Row(
             modifier = Modifier
@@ -94,12 +100,13 @@ fun ProductCardCalculator(
                 Text(
                     text = stringResource(id = R.string.product_card_calculate_result)
                 )
-                val colorText = if (calcData.isBestPrice) Color.Green else Color.White
+                val colorText = if (calcData.isBestPrice) md_best_price else Color.Unspecified
                 Text(
                     text = calcData.resultPrice.toString(),
                     fontSize = 20.sp,
                     color = colorText,
-                    modifier = Modifier
+                    modifier = Modifier,
+                    fontWeight = FontWeight.Bold
 
                 )
             }
