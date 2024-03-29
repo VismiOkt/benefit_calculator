@@ -22,5 +22,7 @@ data class CalculatedDataDbModel(
     var price: Double,
     var weight: Double,
     var resultPrice: Double,
-    var isBestPrice: Boolean
+    var isBestPrice: Boolean,
+    var errorInputWeight: Boolean,
+    var errorInputPrice: Boolean
 )

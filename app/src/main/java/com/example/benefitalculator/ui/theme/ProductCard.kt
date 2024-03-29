@@ -44,7 +44,7 @@ fun ProductCard(
     Card(
         modifier = Modifier
             .clickable {
-                isExpanded.value = !isExpanded.value
+                onCalcDataEditListener(product)
             }
             .fillMaxWidth()
             .animateContentSize()

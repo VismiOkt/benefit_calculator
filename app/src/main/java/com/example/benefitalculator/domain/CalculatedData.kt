@@ -7,6 +7,7 @@ data class CalculatedData(
     var weight: Double = 0.0,
     var resultPrice: Double = 0.0,
     var isBestPrice: Boolean = false,
-    var errorInputWeight: Boolean = false,
-    var errorInputPrice: Boolean = false
+    var errorInputWeight: Boolean = true,
+    var errorInputPrice: Boolean = true
 )
+

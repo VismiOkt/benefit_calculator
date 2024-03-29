@@ -37,7 +37,9 @@ class ProductMapper {
             price = calcData.price,
             weight = calcData.weight,
             resultPrice = calcData.resultPrice,
-            isBestPrice = calcData.isBestPrice
+            isBestPrice = calcData.isBestPrice,
+            errorInputWeight = calcData.errorInputWeight,
+            errorInputPrice = calcData.errorInputPrice
         )
     }
 
@@ -48,7 +50,9 @@ class ProductMapper {
             price = calcDataDb.price,
             weight = calcDataDb.weight,
             resultPrice = calcDataDb.resultPrice,
-            isBestPrice = calcDataDb.isBestPrice
+            isBestPrice = calcDataDb.isBestPrice,
+            errorInputWeight = calcDataDb.errorInputWeight,
+            errorInputPrice = calcDataDb.errorInputPrice
         )
 
     }
