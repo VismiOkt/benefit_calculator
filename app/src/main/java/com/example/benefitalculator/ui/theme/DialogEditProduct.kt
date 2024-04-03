@@ -22,7 +22,8 @@ import com.example.benefitalculator.domain.Product
 fun DialogEditProduct(
     product: Product,
     viewModel: ProductViewModel,
-    dialogState: MutableState<Boolean>
+    dialogState: MutableState<Boolean>,
+    topAppBarSearch: MutableState<Boolean>
 ) {
     val nameProduct = rememberSaveable { mutableStateOf(product.name) }
     val noteProduct = rememberSaveable { mutableStateOf(product.note) }
@@ -37,6 +38,7 @@ fun DialogEditProduct(
             TextButton(
                 onClick = {
                     viewModel.editProduct(product, nameProduct.value, noteProduct.value)
+                    topAppBarSearch.value = false
                     if (!errorInputName.value) dialogState.value = false
                 }
             ) {

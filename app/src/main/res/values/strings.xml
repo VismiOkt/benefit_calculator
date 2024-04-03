@@ -29,6 +29,7 @@
     <string name="about_program_screen_copy">Номер карты скопирован</string>
     <string name="about_program_screen_card_tinkoff">https://www.tinkoff.ru/rm/strekalova.viktoriya8/57dMQ77598/</string>
     <string name="about_program_screen_card_sberbank">https://www.sberbank.com/sms/pbpn?requisiteNumber=79191931344</string>
+    <string name="product_screen_search">Поиск...</string>
 
 
 </resources>

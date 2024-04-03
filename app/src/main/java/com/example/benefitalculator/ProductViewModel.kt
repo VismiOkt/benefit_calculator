@@ -30,6 +30,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val productList: LiveData<List<Product>> = getProductListUseCase.getProductList()
     private val initialState = ProductScreenState.Products(productList)
 
+    private val _productListSearch = MutableLiveData<List<Product>>(listOf())
+    val productListSearch: LiveData<List<Product>> = _productListSearch
+
     private val _screenState = MutableLiveData<ProductScreenState>(initialState)
     val screenState: LiveData<ProductScreenState> = _screenState
 
@@ -98,5 +101,21 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     fun resetErrorInputName() {
         _errorInputName.value = false
     }
+
+    fun searchProduct(inputText: String){
+        val pL = productList.value?.toMutableList() ?: mutableListOf()
+        val new = pL.filter {
+            it.name.contains(inputText, ignoreCase = true)
+        }
+        _productListSearch.value = new
+    }
+
+    fun initialSearchProductList() {
+        val pL = productList.value?.toMutableList() ?: mutableListOf()
+        _productListSearch.value = pL
+    }
+
+
+
 
 }

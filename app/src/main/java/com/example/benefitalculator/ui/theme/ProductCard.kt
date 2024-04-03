@@ -16,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,14 +32,15 @@ import com.example.benefitalculator.domain.Product
 fun ProductCard(
     product: Product,
     viewModel: ProductViewModel,
-    onCalcDataEditListener: (Product) -> Unit
+    onCalcDataEditListener: (Product) -> Unit,
+    topAppBarSearch: MutableState<Boolean>
 ) {
     val isExpanded = rememberSaveable {
         mutableStateOf(false)
     }
     val dialogEditState = remember { mutableStateOf(false) }
     if (dialogEditState.value) {
-        DialogEditProduct(product, viewModel, dialogEditState)
+        DialogEditProduct(product, viewModel, dialogEditState, topAppBarSearch)
     }
 
     Card(
