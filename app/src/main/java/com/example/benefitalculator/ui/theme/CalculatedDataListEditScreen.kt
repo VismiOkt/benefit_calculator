@@ -13,20 +13,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -98,22 +97,22 @@ fun CalculatedDataListEdit(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(calcDataLi.value, key = { it.id }) { calcData ->
-            val dismissState = rememberDismissState(
+            val dismissState = rememberSwipeToDismissBoxState(
                 confirmValueChange = {
                     if (isLastCalcData.value) false
                     else {
-                        if (it == DismissValue.DismissedToStart) {
+                        if (it == SwipeToDismissBoxValue.EndToStart) {
                             viewModel.deleteCalculateData(calcData)
                             true
                         } else false
                     }
                 }
             )
-            SwipeToDismiss(
+            SwipeToDismissBox(
                 state = dismissState,
                 modifier = Modifier.animateItemPlacement(),
-                directions = setOf(DismissDirection.EndToStart),
-                background = {
+                enableDismissFromEndToStart = true,
+                backgroundContent = {
                     Column(
                         horizontalAlignment = Alignment.End,
                         modifier = Modifier
@@ -126,20 +125,20 @@ fun CalculatedDataListEdit(
                             contentDescription = stringResource(R.string.home_screen_delete_calculation)
                         )
                     }
-                },
-                dismissContent = {
-                    ProductCardCalculator2(
-                        calcData,
-                        resultCalculate = { price, weight, calcData ->
-                            viewModel.calculate(
-                                price,
-                                weight,
-                                calcData
-                            )
-                        }
-                    )
                 }
-            )
+            ) {
+                ProductCardCalculator2(
+                    calcData,
+                    resultCalculate = { price, weight, calcData ->
+                        viewModel.calculate(
+                            price,
+                            weight,
+                            calcData
+                        )
+                    }
+                )
+
+            }
         }
     }
 }
@@ -170,9 +169,8 @@ fun TopAppBarCalcDataEdit(
                 onBackPressed()
             }) {
                 Icon(
-                    Icons.Outlined.ArrowBack,
-                    contentDescription = "",
-                    modifier = Modifier.width(32.dp)
+                    Icons.AutoMirrored.Outlined.ArrowBack,
+                    contentDescription = ""
                 )
             }
 

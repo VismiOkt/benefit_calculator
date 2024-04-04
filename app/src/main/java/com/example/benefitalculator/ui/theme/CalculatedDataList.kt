@@ -18,15 +18,15 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
@@ -59,20 +59,19 @@ fun CalculatedDataList(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(calculationDataList.value, key = { it.id }) { calcData ->
-            val dismissState = rememberDismissState(
+            val dismissState = rememberSwipeToDismissBoxState(
                 confirmValueChange = {
                     !isLastCalcData.value
                 }
             )
-            if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+            if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
                 viewModel.deleteCalculateData(calcData)
             }
-
-            SwipeToDismiss(
+            SwipeToDismissBox(
                 state = dismissState,
                 modifier = Modifier.animateItemPlacement(),
-                directions = setOf(DismissDirection.EndToStart),
-                background = {
+                enableDismissFromEndToStart = true,
+                backgroundContent = {
                     Column(
                         horizontalAlignment = Alignment.End,
                         modifier = Modifier
@@ -86,21 +85,21 @@ fun CalculatedDataList(
                         )
                     }
                 },
-                dismissContent = {
-                    ProductCardCalculator(
-                        calcData,
-                        resultCalculate = { price, weight, calcData ->
-                            viewModel.calculate(
-                                price,
-                                weight,
-                                calcData
-                            )
-                        },
-                        resetErrorInputPrice = { viewModel.resetErrorInputPrice(calcData) },
-                        resetErrorInputWeight = { viewModel.resetErrorInputWeight(calcData) }
-                    )
-                }
-            )
+
+            ) {
+                ProductCardCalculator(
+                    calcData,
+                    resultCalculate = { price, weight, calcData ->
+                        viewModel.calculate(
+                            price,
+                            weight,
+                            calcData
+                        )
+                    },
+                    resetErrorInputPrice = { viewModel.resetErrorInputPrice(calcData) },
+                    resetErrorInputWeight = { viewModel.resetErrorInputWeight(calcData) }
+                )
+            }
 
 
         }

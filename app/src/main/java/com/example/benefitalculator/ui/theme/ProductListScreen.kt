@@ -11,20 +11,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -86,15 +86,15 @@ fun ProductList(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(productListS.value, key = { it.id }) { product ->
-            val dismissState = rememberDismissState()
-            if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+            val dismissState = rememberSwipeToDismissBoxState()
+            if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
                 viewModel.deleteProduct(product)
             }
-            SwipeToDismiss(
+            SwipeToDismissBox(
                 state = dismissState,
                 modifier = Modifier.animateItemPlacement(),
-                directions = setOf(DismissDirection.EndToStart),
-                background = {
+                enableDismissFromEndToStart = true,
+                backgroundContent = {
                     Column(
                         horizontalAlignment = Alignment.End,
                         modifier = Modifier
@@ -107,16 +107,16 @@ fun ProductList(
                             contentDescription = stringResource(R.string.home_screen_delete_calculation)
                         )
                     }
-                },
-                dismissContent = {
-                    ProductCard(
-                        product,
-                        viewModel,
-                        onCalcDataEditListener,
-                        topAppBarSearch
-                    )
                 }
-            )
+            ) {
+                ProductCard(
+                    product,
+                    viewModel,
+                    onCalcDataEditListener,
+                    topAppBarSearch
+                )
+            }
+
         }
     }
 }
@@ -181,7 +181,7 @@ fun TopAppBarSearch(
         placeholder = { Text(stringResource(R.string.product_screen_search)) },
         leadingIcon = {
             Icon(
-                Icons.Default.ArrowBack,
+                Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = null,
                 modifier = Modifier.clickable {
                     topAppBarSearch.value = false

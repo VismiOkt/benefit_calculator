@@ -10,11 +10,14 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.benefitalculator.MainViewModel
@@ -23,13 +26,36 @@ import com.example.benefitalculator.navigation.AppNavGraph
 import com.example.benefitalculator.navigation.Screen
 import com.example.benefitalculator.navigation.rememberNavigationState
 
+@Composable
+fun BenefitCalculatorApp(
+    windowSize: WindowSizeClass
+) {
+    when (windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            BenefitCalculatorAppPortrait()
+        }
+        WindowWidthSizeClass.Expanded -> {
+            BenefitCalculatorAppLandscape()
+        }
+    }
+}
+
+@Composable
+fun BenefitCalculatorAppPortrait() {
+
+}
+
+@Composable
+fun BenefitCalculatorAppLandscape() {
+
+}
+
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(
-    viewModel: MainViewModel
-) {
+fun HomeScreen() {
+    val viewModel: MainViewModel = viewModel()
     val calculationDataList = viewModel.calculateData.observeAsState(listOf())
-
     val navigationState = rememberNavigationState()
     val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
     val currentRout = navBackStackEntry?.destination?.route
