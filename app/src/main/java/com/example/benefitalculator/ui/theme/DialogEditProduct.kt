@@ -2,6 +2,9 @@ package com.example.benefitalculator.ui.theme
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -14,6 +17,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.window.DialogProperties
 import com.example.benefitalculator.ProductViewModel
 import com.example.benefitalculator.R
 import com.example.benefitalculator.domain.Product
@@ -34,6 +38,8 @@ fun DialogEditProduct(
 
     AlertDialog(
         onDismissRequest = { dialogState.value = false },
+        properties = DialogProperties(decorFitsSystemWindows = false),
+        modifier = Modifier.imePadding().verticalScroll(rememberScrollState()),
         confirmButton = {
             TextButton(
                 onClick = {
@@ -42,7 +48,7 @@ fun DialogEditProduct(
                     if (!errorInputName.value) dialogState.value = false
                 }
             ) {
-                Text(text = stringResource(R.string.dialog_save_product_save))
+                Text(text = stringResource(R.string.dialog_save_product_save), modifier = Modifier.imePadding())
             }
         },
         dismissButton = {
