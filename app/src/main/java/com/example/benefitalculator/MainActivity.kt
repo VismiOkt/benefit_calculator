@@ -9,8 +9,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
+import com.example.benefitalculator.ui.theme.BenefitCalculatorApp
 import com.example.benefitalculator.ui.theme.BenefitСalculatorTheme
-import com.example.benefitalculator.ui.theme.HomeScreen
+
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.primary
                 ) {
-                    HomeScreen()
+                    BenefitCalculatorApp(windowSize = windowSizeClass)
                 }
             }
         }

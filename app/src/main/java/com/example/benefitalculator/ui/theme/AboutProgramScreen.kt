@@ -39,7 +39,9 @@ import com.example.benefitalculator.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutProgramScreen() {
+fun AboutProgramScreen(
+    modifier: Modifier
+) {
     val viewModel: AboutProgramViewModel = viewModel()
     val context = LocalContext.current
     val intentTi = remember {
@@ -56,10 +58,9 @@ fun AboutProgramScreen() {
     }
 
     Card(
-        modifier = Modifier
-
+        modifier = modifier
             .fillMaxSize()
-            .padding(top = 65.dp, start = 8.dp, end = 8.dp, bottom = 98.dp)
+            .padding(top = 65.dp, start = 8.dp, end = 8.dp)
             .verticalScroll(
                 state = rememberScrollState()
             )

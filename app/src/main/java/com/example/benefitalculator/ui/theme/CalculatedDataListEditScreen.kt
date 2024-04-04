@@ -47,7 +47,8 @@ import com.example.benefitalculator.domain.CalculatedData
 fun CalculatedDataListEditScreen(
     productId: Int,
     productName: String,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    modifier: Modifier
 ) {
     val viewModel: CalculatedDataEditViewModel = viewModel(
         factory = CalculatedDataEditViewModelFactory(productId)
@@ -67,7 +68,7 @@ fun CalculatedDataListEditScreen(
         contentAlignment = Alignment.BottomEnd
     ) {
         FloatingActionButton(
-            modifier = Modifier.padding(bottom = 95.dp, end = 16.dp),
+            modifier = modifier.padding(end = 16.dp),
             onClick = {
                 viewModel.addNewCalculateData()
             }) {

@@ -44,7 +44,8 @@ import com.example.benefitalculator.domain.CalculatedData
 @Composable
 fun CalculatedDataList(
     viewModel: MainViewModel,
-    calculationDataList: State<List<CalculatedData>>
+    calculationDataList: State<List<CalculatedData>>,
+    modifier: Modifier
 
 ) {
     val isLastCalcData = viewModel.isLastCalcData.observeAsState(false)
@@ -109,7 +110,7 @@ fun CalculatedDataList(
         contentAlignment = Alignment.BottomEnd
     ) {
         FloatingActionButton(
-            modifier = Modifier.padding(bottom = 95.dp, end = 16.dp),
+            modifier = modifier.padding(end = 16.dp),
             onClick = {
                 viewModel.addNewCalculateData()
             }
