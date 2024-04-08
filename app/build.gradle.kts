@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.benefitalculator"
+    namespace = "com.vismiokt.benefit_calculator"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.benefitalculator"
+        applicationId = "com.vismiokt.benefit_calculator"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
