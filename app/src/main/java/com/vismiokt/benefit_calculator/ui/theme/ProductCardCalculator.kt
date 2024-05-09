@@ -34,21 +34,17 @@ import com.vismiokt.benefit_calculator.domain.CalculatedData
 fun ProductCardCalculator(
     calcData: CalculatedData,
     resultCalculate: (String, String, CalculatedData) -> Unit,
-    resetErrorInputPrice: (CalculatedData) -> Unit,
-    resetErrorInputWeight: (CalculatedData) -> Unit
+    startPrice: String,
+    startWeight: String
 ) {
 
-    val price = rememberSaveable { mutableStateOf("") }
-    val weight = rememberSaveable { mutableStateOf("") }
+    val price = rememberSaveable { mutableStateOf(startPrice) }
+    val weight = rememberSaveable { mutableStateOf(startWeight) }
+    resultCalculate(price.value, weight.value, calcData)
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged {
-                if (!it.isFocused) {
-                    resultCalculate(price.value, weight.value, calcData)
-                }
-            },
+            .fillMaxWidth(),
         colors = if (calcData.isBestPrice) CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer) else CardDefaults.cardColors()
 
     ) {
@@ -62,39 +58,31 @@ fun ProductCardCalculator(
             OutlinedTextField(
                 value = price.value,
                 onValueChange = {
-                    resetErrorInputPrice(calcData)
                     price.value = it
                 },
                 isError = calcData.errorInputPrice,
                 label = { Text(stringResource(R.string.product_card_calculate_price_1)) },
                 singleLine = true,
                 modifier = Modifier.weight(1f),
-                keyboardOptions = KeyboardOptions(
+                keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(onDone = {
-                    resultCalculate(price.value, weight.value, calcData)
-                })
+                    imeAction = ImeAction.Next
+                )
             )
             Spacer(modifier = Modifier.width(8.dp))
             OutlinedTextField(
                 value = weight.value,
                 onValueChange = {
-                    resetErrorInputWeight(calcData)
                     weight.value = it
                 },
                 label = { Text(stringResource(R.string.product_card_calculate_weight_1)) },
                 isError = calcData.errorInputWeight,
                 singleLine = true,
                 modifier = Modifier.weight(1f),
-                keyboardOptions = KeyboardOptions(
+                keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(onDone = {
-                    resultCalculate(price.value, weight.value, calcData)
-                })
+                    imeAction = ImeAction.Next
+                )
             )
             Spacer(modifier = Modifier.width(8.dp))
 

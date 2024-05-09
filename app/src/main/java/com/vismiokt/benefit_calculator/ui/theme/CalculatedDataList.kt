@@ -97,12 +97,10 @@ fun CalculatedDataList(
                             calcData
                         )
                     },
-                    resetErrorInputPrice = { viewModel.resetErrorInputPrice(calcData) },
-                    resetErrorInputWeight = { viewModel.resetErrorInputWeight(calcData) }
+                    startPrice = "",
+                    startWeight = ""
                 )
             }
-
-
         }
     }
     Box(

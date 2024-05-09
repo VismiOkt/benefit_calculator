@@ -128,7 +128,7 @@ fun CalculatedDataListEdit(
                     }
                 }
             ) {
-                ProductCardCalculator2(
+                ProductCardCalculator(
                     calcData,
                     resultCalculate = { price, weight, calcData ->
                         viewModel.calculate(
@@ -136,7 +136,9 @@ fun CalculatedDataListEdit(
                             weight,
                             calcData
                         )
-                    }
+                    },
+                    startPrice = calcData.price.toString(),
+                    startWeight = calcData.weight.toString()
                 )
 
             }
