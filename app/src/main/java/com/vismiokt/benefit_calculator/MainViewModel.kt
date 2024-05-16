@@ -1,5 +1,6 @@
 package com.vismiokt.benefit_calculator
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,8 +30,8 @@ class MainViewModel : ViewModel() {
         _isLastCalculateData.value = cD.size < 2
     }
 
-
-    private fun getResult(
+    @VisibleForTesting
+    internal fun getResult(
         calcD: CalculatedData,
         price: Double,
         weight: Double,

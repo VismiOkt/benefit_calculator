@@ -9,6 +9,13 @@ import org.junit.Assert.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
+class BenefitCalculatedUnitTest {
+    @Test
+    fun get_result_main_view_model_test () {
+
+
+    }
+}
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {

@@ -1,6 +1,8 @@
 package com.vismiokt.benefit_calculator.ui.theme
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,12 +51,16 @@ fun ProductCard(
                 onCalcDataEditListener(product)
             }
             .fillMaxWidth()
-            .animateContentSize()
+
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(8.dp)
+                .animateContentSize(
+                    animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMedium)
+
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
