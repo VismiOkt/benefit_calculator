@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator.ui.theme
+package com.vismiokt.benefit_calculator.ui
 
 import androidx.lifecycle.LiveData
 import com.vismiokt.benefit_calculator.domain.CalculatedData

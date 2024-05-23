@@ -1,13 +1,19 @@
-package com.vismiokt.benefit_calculator
+package com.vismiokt.benefit_calculator.ui
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.widget.Toast
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
+import com.vismiokt.benefit_calculator.R
 
 
 class AboutProgramViewModel : ViewModel() {

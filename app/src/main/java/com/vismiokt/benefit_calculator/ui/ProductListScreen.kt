@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator.ui.theme
+package com.vismiokt.benefit_calculator.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -18,18 +17,18 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,7 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.vismiokt.benefit_calculator.ProductViewModel
 import com.vismiokt.benefit_calculator.R
 import com.vismiokt.benefit_calculator.domain.Product
 
@@ -53,32 +51,79 @@ fun ProductListScreen(
         mutableStateOf(false)
 
     }
+    val errorInputName = viewModel.errorInputName.observeAsState(false)
+    val dialogEditState = remember { mutableStateOf(false) }
+    val productListSearch = viewModel.productListSearch.observeAsState(listOf())
 
     when (val screenStateCurrent = screenState.value) {
         is ProductScreenState.Products -> {
             ProductList(
-                screenStateCurrent.products,
-                viewModel,
-                onCalcDataEditListener,
-                topAppBarSearch
+                productList = screenStateCurrent.products,
+                onCalcDataEditListener = onCalcDataEditListener,
+                errorInputName = errorInputName,
+                resetErrorInputName = { viewModel.resetErrorInputName() },
+                onSavePressed = { product, nameProduct, noteProduct ->
+                    viewModel.editProduct(product, nameProduct, noteProduct)
+                    topAppBarSearch.value = false
+                    if (!errorInputName.value) dialogEditState.value = false
+                },
+                dialogEditState = dialogEditState,
+                onEditPressed = {
+                    viewModel.getProduct(productId = it)
+                    dialogEditState.value = true
+                },
+                onDeletePressed = { viewModel.deleteProduct(it) }
             )
         }
-
         ProductScreenState.Initial -> {}
     }
     if (topAppBarSearch.value) {
-        TopAppBarSearch(topAppBarSearch, viewModel, onCalcDataEditListener)
-    } else TopAppBarFavorites(topAppBarSearch, viewModel)
+        TopAppBarSearch(
+            topAppBarSearch = topAppBarSearch,
+            onCalcDataEditListener = onCalcDataEditListener,
+            dialogEditState = dialogEditState,
+            errorInputName = errorInputName,
+            onEditPressed = {
+                viewModel.getProduct(productId = it)
+                dialogEditState.value = true
+            },
+            onSavePressed = { product, nameProduct, noteProduct ->
+                viewModel.editProduct(product, nameProduct, noteProduct)
+                topAppBarSearch.value = false
+                if (!errorInputName.value) dialogEditState.value = false
+            },
+            resetErrorInputName = { viewModel.resetErrorInputName() },
+            productListSearch = productListSearch,
+            onSearchProduct = { viewModel.searchProduct(it) }
+
+        )
+    } else BenefitCalculatorAppBar(
+        title = stringResource(R.string.navigation_favorites),
+        icon = Icons.Outlined.FavoriteBorder,
+        onBackPressed = {},
+        actionBar = {
+            ActionBarOneElement(iconActionOne = Icons.Default.Search) {
+                viewModel.initialSearchProductList()
+                topAppBarSearch.value = true
+            }
+        }
+
+    )
 
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ProductList(
     productList: LiveData<List<Product>>,
-    viewModel: ProductViewModel,
     onCalcDataEditListener: (Product) -> Unit,
-    topAppBarSearch: MutableState<Boolean>
+    errorInputName: State<Boolean>,
+    resetErrorInputName: () -> Unit,
+    onSavePressed: (Product, String, String) -> Unit,
+    dialogEditState: MutableState<Boolean>,
+    onEditPressed: (Int) -> Unit,
+    onDeletePressed: (Product) -> Unit
 ) {
     val productListS = productList.observeAsState(listOf())
     LazyColumn(
@@ -88,7 +133,7 @@ fun ProductList(
         items(productListS.value, key = { it.id }) { product ->
             val dismissState = rememberSwipeToDismissBoxState()
             if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
-                viewModel.deleteProduct(product)
+                onDeletePressed(product)
             }
             SwipeToDismissBox(
                 state = dismissState,
@@ -110,71 +155,44 @@ fun ProductList(
                 }
             ) {
                 ProductCard(
-                    product,
-                    viewModel,
-                    onCalcDataEditListener,
-                    topAppBarSearch
+                    product = product,
+                    onCalcDataEditListener = onCalcDataEditListener,
+                    errorInputName = errorInputName,
+                    resetErrorInputName = resetErrorInputName,
+                    onSavePressed = onSavePressed,
+                    dialogEditState = dialogEditState,
+                    onEditPressed = { onEditPressed(it) }
                 )
             }
-
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBarFavorites(
-    topAppBarSearch: MutableState<Boolean>,
-    viewModel: ProductViewModel
-
-) {
-    TopAppBar(
-        title = {
-            Text(text = stringResource(R.string.navigation_favorites))
-        },
-        navigationIcon = {
-            Icon(
-                Icons.Outlined.FavoriteBorder,
-                contentDescription = "",
-                modifier = Modifier.width(32.dp)
-            )
-        },
-        actions = {
-            IconButton(
-                onClick = {
-                    viewModel.initialSearchProductList()
-                    topAppBarSearch.value = true
-                }
-            ) {
-                Icon(
-                    Icons.Default.Search,
-                    contentDescription = ""
-                )
-            }
-        }
-
-    )
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarSearch(
     topAppBarSearch: MutableState<Boolean>,
-    viewModel: ProductViewModel,
-    onCalcDataEditListener: (Product) -> Unit
+    onCalcDataEditListener: (Product) -> Unit,
+    errorInputName: State<Boolean>,
+    resetErrorInputName: () -> Unit,
+    onSavePressed: (Product, String, String) -> Unit,
+    dialogEditState: MutableState<Boolean>,
+    onEditPressed: (Int) -> Unit,
+    productListSearch: State<List<Product>>,
+    onSearchProduct: (String) -> Unit
 ) {
     var text by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
-    val productListSearch = viewModel.productListSearch.observeAsState(listOf())
 
     SearchBar(
         query = text,
         onQueryChange = {
-            viewModel.searchProduct(it)
+            onSearchProduct(it)
             text = it
         },
         onSearch = {
-            viewModel.searchProduct(it)
+            onSearchProduct(it)
         },
         active = true,
         onActiveChange = { active = it },
@@ -192,10 +210,8 @@ fun TopAppBarSearch(
             if (active) {
                 Icon(
                     modifier = Modifier.clickable {
-
                         text = ""
-                        viewModel.searchProduct("")
-
+                        onSearchProduct("")
                     },
                     imageVector = Icons.Default.Close,
                     contentDescription = null
@@ -209,10 +225,13 @@ fun TopAppBarSearch(
         ) {
             items(productListSearch.value, key = { it.id }) { product ->
                 ProductCard(
-                    product,
-                    viewModel,
-                    onCalcDataEditListener,
-                    topAppBarSearch
+                    product = product,
+                    onCalcDataEditListener = onCalcDataEditListener,
+                    errorInputName = errorInputName,
+                    resetErrorInputName = resetErrorInputName,
+                    onSavePressed = onSavePressed,
+                    dialogEditState = dialogEditState,
+                    onEditPressed = { onEditPressed(it) }
                 )
 
             }

@@ -1,21 +1,27 @@
-package com.vismiokt.benefit_calculator.ui.theme
+package com.vismiokt.benefit_calculator.ui
 
 import android.annotation.SuppressLint
-import androidx.compose.material3.Surface
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -23,12 +29,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.vismiokt.benefit_calculator.MainViewModel
 import com.vismiokt.benefit_calculator.navigation.AppNavGraph
 import com.vismiokt.benefit_calculator.navigation.NavigationState
 import com.vismiokt.benefit_calculator.navigation.rememberNavigationState
@@ -43,11 +49,9 @@ fun BenefitCalculatorApp(
         WindowWidthSizeClass.Compact -> {
             BenefitCalculatorAppPortrait(navigationState)
         }
-
         WindowWidthSizeClass.Expanded, WindowWidthSizeClass.Medium -> {
             BenefitCalculatorAppLandscape(navigationState)
         }
-
         else -> BenefitCalculatorAppPortrait(navigationState)
     }
 }
@@ -62,7 +66,6 @@ fun BenefitCalculatorAppPortrait(
     ) {
         HomeScreen(navigationState, Modifier.padding(bottom = 95.dp))
     }
-
 }
 
 @Composable
@@ -200,4 +203,71 @@ fun HomeScreen(
         }
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BenefitCalculatorAppBar (
+    title: String,
+    icon: ImageVector,
+    onBackPressed: () -> Unit,
+    actionBar: @Composable RowScope.() -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(text = title)
+        },
+        navigationIcon = {
+            IconButton(onClick = {
+                onBackPressed()
+            }) {
+                Icon(
+                    icon,
+                    contentDescription = null
+                )
+            }
+        },
+        actions = actionBar
+    )
+}
+
+@Composable
+fun ActionBarTwoElements(
+    iconActionOne: ImageVector,
+    iconActionTwo: ImageVector,
+    onActionOnePressed: () -> Unit,
+    onActionTwoPressed: () -> Unit,
+) {
+    IconButton(
+        onClick = onActionOnePressed
+    ) {
+        Icon(
+            iconActionOne,
+            contentDescription = null
+        )
+    }
+    Spacer(modifier = Modifier.width(8.dp))
+    IconButton(
+        onClick = onActionTwoPressed
+    ) {
+        Icon(iconActionTwo, contentDescription = "")
+    }
+    Spacer(modifier = Modifier.width(8.dp))
+}
+
+@Composable
+fun ActionBarOneElement(
+    iconActionOne: ImageVector,
+    onActionOnePressed: () -> Unit
+) {
+    IconButton(
+        onClick = onActionOnePressed
+    ) {
+        Icon(
+            iconActionOne,
+            contentDescription = null
+        )
+    }
+    Spacer(modifier = Modifier.width(8.dp))
+}
+
 

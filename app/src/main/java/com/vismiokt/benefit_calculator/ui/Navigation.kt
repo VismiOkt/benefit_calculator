@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator.ui.theme
+package com.vismiokt.benefit_calculator.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite

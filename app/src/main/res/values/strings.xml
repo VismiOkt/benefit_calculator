@@ -1,11 +1,15 @@
 <resources>
     <string name="app_name">Калькулятор выгоды</string>
     <string name="product_card_calculate_price_1">Цена </string>
-    <string name="product_card_calculate_weight_1">Вес, кг </string>
+    <string name="product_card_calculate_weight_1">Вес, %s</string>
     <string name="product_card_calculate_result">Цена за кг: </string>
     <string name="home_screen_add_new_calculation">Add new calculation</string>
     <string name="home_screen_delete_calculation">Delete calculation</string>
     <string name="home_screen_delete_calculated">Удаление строки</string>
+    <string name="home_screen_kilogram">Килограммы</string>
+    <string name="home_screen_gram">Граммы</string>
+    <string name="home_screen_kg">кг</string>
+    <string name="home_screen_g">г</string>
     <string name="product_screen_delete_calculated">Удаление строки</string>
     <string name="home_screen_clear_all">Стереть всё</string>
     <string name="navigation_home">Главная</string>

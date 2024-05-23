@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator.ui.theme
+package com.vismiokt.benefit_calculator.ui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -19,6 +19,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,24 +29,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.vismiokt.benefit_calculator.ProductViewModel
 import com.vismiokt.benefit_calculator.domain.Product
 
 @Composable
 fun ProductCard(
     product: Product,
-    viewModel: ProductViewModel,
+ //   viewModel: ProductViewModel,
     onCalcDataEditListener: (Product) -> Unit,
-    topAppBarSearch: MutableState<Boolean>
+//    topAppBarSearch: MutableState<Boolean>,
+    errorInputName: State<Boolean>,
+    resetErrorInputName: () -> Unit,
+    onSavePressed: (Product, String, String) -> Unit,
+    dialogEditState: MutableState<Boolean>,
+    onEditPressed: (Int) -> Unit
+
 ) {
     val isExpanded = rememberSaveable {
         mutableStateOf(false)
     }
-    val dialogEditState = remember { mutableStateOf(false) }
-    if (dialogEditState.value) {
-        DialogEditProduct(product, viewModel, dialogEditState, topAppBarSearch)
-    }
 
+//    val dialogEditState = remember { mutableStateOf(false) }
+    if (dialogEditState.value) {
+        DialogEditProduct(
+            product,
+            dialogEditState,
+            errorInputName = errorInputName,
+            resetErrorInputName = resetErrorInputName,
+            onSavePressed = { nameProduct, noteProduct -> onSavePressed(product, nameProduct, noteProduct) },
+//            { nameProduct, noteProduct ->
+//                viewModel.editProduct(product, nameProduct, noteProduct)
+//                topAppBarSearch.value = false
+//                if (!errorInputName.value) dialogEditState.value = false
+//            }
+        )
+    }
     Card(
         modifier = Modifier
             .clickable {
@@ -58,8 +76,10 @@ fun ProductCard(
                 .fillMaxWidth()
                 .padding(8.dp)
                 .animateContentSize(
-                    animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMedium)
-
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioNoBouncy,
+                        stiffness = Spring.StiffnessMedium
+                    )
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -76,10 +96,12 @@ fun ProductCard(
                     }) {
                         Icon(Icons.AutoMirrored.Outlined.List, contentDescription = "")
                     }
-                    IconButton(onClick = {
-                        viewModel.getProduct(productId = product.id)
-                        dialogEditState.value = true
-                    }) {
+                    IconButton(onClick = { onEditPressed(product.id) }
+//                    {
+//                        viewModel.getProduct(productId = product.id)
+//                        dialogEditState.value = true
+//                    }
+                    ) {
                         Icon(Icons.Outlined.Edit, contentDescription = "")
                     }
                 }

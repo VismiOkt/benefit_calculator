@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator
+package com.vismiokt.benefit_calculator.ui
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
@@ -6,6 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.vismiokt.benefit_calculator.domain.CalculatedData
 import com.vismiokt.benefit_calculator.domain.ParseDataDoubleUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlin.math.roundToInt
 
 class MainViewModel : ViewModel() {
@@ -18,6 +21,9 @@ class MainViewModel : ViewModel() {
         add(CalculatedData(0))
         add(CalculatedData(1))
     }
+
+    private val _uiState = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState
 
     private val _calculateData = MutableLiveData<List<CalculatedData>>(listCalculateDate)
     val calculateData: LiveData<List<CalculatedData>> = _calculateData
@@ -53,18 +59,16 @@ class MainViewModel : ViewModel() {
             }
         }
         _calculateData.value = newCD
-
-
     }
 
     fun calculate(inputPrice: String?, inputWeight: String?, calcD: CalculatedData) {
+        val index = _uiState.value.indicatorTabsState
         val price = parseDataDoubleUseCase.parseData(inputPrice)
-        val weight = parseDataDoubleUseCase.parseData(inputWeight)
+        var weight = parseDataDoubleUseCase.parseData(inputWeight)
+        if (index == 1) weight /= 1000
         val fieldsValid = validateInput(price, weight, calcD)
         getResult(calcD, price, weight, fieldsValid)
         selectBestPrice()
-
-
     }
 
     private fun selectBestPrice() {
@@ -170,6 +174,15 @@ class MainViewModel : ViewModel() {
             add(CalculatedData(count++))
         }
         _calculateData.value = cD
+    }
 
+    fun switchBetweenKgAndG (index: Int) {
+        _uiState.update {
+            it.copy(indicatorTabsState = index)
+        }
+    }
+
+    fun viewResultInGrams(weight: String): String {
+        return (parseDataDoubleUseCase.parseData(weight)*1000).toString()
     }
 }

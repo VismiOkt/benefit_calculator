@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator
+package com.vismiokt.benefit_calculator.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -14,7 +14,6 @@ import com.vismiokt.benefit_calculator.domain.GetProductListUseCase
 import com.vismiokt.benefit_calculator.domain.GetProductUseCase
 import com.vismiokt.benefit_calculator.domain.Product
 import com.vismiokt.benefit_calculator.domain.UpdateProductUseCase
-import com.vismiokt.benefit_calculator.ui.theme.ProductScreenState
 import kotlinx.coroutines.launch
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {

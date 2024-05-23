@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator.ui.theme
+package com.vismiokt.benefit_calculator.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -20,10 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,10 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.vismiokt.benefit_calculator.AboutProgramViewModel
 import com.vismiokt.benefit_calculator.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutProgramScreen(
     modifier: Modifier
@@ -96,11 +91,11 @@ fun AboutProgramScreen(
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         modifier = Modifier.clickable {
-                        viewModel.sendMail(context)
-                    },
+                            viewModel.sendMail(context)
+                        },
                         text = stringResource(R.string.about_program_screen_email),
                         textDecoration = TextDecoration.Underline
-                        )
+                    )
                 }
 
             }
@@ -115,31 +110,11 @@ fun AboutProgramScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = stringResource(R.string.about_program_screen_version))
-
         }
-
     }
-    TopAppBar(title = {
-        TopAppBarAboutProgram()
-    })
-
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBarAboutProgram(
-) {
-    TopAppBar(
-        title = {
-            Text(text = stringResource(R.string.about_program_screen_title))
-        },
-        navigationIcon = {
-            Icon(
-                Icons.Outlined.Info,
-                contentDescription = "",
-                modifier = Modifier.width(32.dp)
-            )
-        }
-    )
+    BenefitCalculatorAppBar(
+        title = stringResource(R.string.about_program_screen_title),
+        icon = Icons.Outlined.Info,
+        onBackPressed = { }) {
+    }
 }

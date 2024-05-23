@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator.ui.theme
+package com.vismiokt.benefit_calculator.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +11,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -18,20 +19,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.vismiokt.benefit_calculator.ProductViewModel
 import com.vismiokt.benefit_calculator.R
-import com.vismiokt.benefit_calculator.domain.CalculatedData
+import com.vismiokt.benefit_calculator.domain.Product
 
 @Composable
-fun DialogSaveProduct(
+fun DialogEditProduct(
+    product: Product,
+ //   viewModel: ProductViewModel,
     dialogState: MutableState<Boolean>,
-    calcData: List<CalculatedData>
-) {
-    val viewModel: ProductViewModel = viewModel()
-    val nameProduct = rememberSaveable { mutableStateOf("") }
-    val noteProduct = rememberSaveable { mutableStateOf("") }
-    val errorInputName = viewModel.errorInputName.observeAsState(false)
+ //   topAppBarSearch: MutableState<Boolean>,
+    errorInputName: State<Boolean>,
+    resetErrorInputName: () -> Unit,
+    onSavePressed: (String, String) -> Unit,
+
+    ) {
+    val nameProduct = rememberSaveable { mutableStateOf(product.name) }
+    val noteProduct = rememberSaveable { mutableStateOf(product.note) }
+ //   val errorInputName = viewModel.errorInputName.observeAsState(false)
 
     val maxName = 100
     val maxNote = 350
@@ -42,12 +46,13 @@ fun DialogSaveProduct(
         modifier = Modifier.imePadding().verticalScroll(rememberScrollState()),
         confirmButton = {
             TextButton(
-                onClick = {
-                    viewModel.addProduct(nameProduct.value, noteProduct.value, calcData)
-                    if (!errorInputName.value) dialogState.value = false
-                }
+                onClick = { onSavePressed(nameProduct.value, noteProduct.value) }
+//                    viewModel.editProduct(product, nameProduct.value, noteProduct.value)
+//                    topAppBarSearch.value = false
+//                    if (!errorInputName.value) dialogState.value = false
+
             ) {
-                Text(text = stringResource(R.string.dialog_save_product_save))
+                Text(text = stringResource(R.string.dialog_save_product_save), modifier = Modifier.imePadding())
             }
         },
         dismissButton = {
@@ -57,13 +62,14 @@ fun DialogSaveProduct(
         },
         title = {
             Column {
-                Text(text = stringResource(R.string.dialog_save_product_title_save))
+                Text(text = stringResource(R.string.dialog_edit_product_title_save))
                 TextField(
                     value = nameProduct.value,
                     isError = errorInputName.value,
+                    singleLine = true,
                     onValueChange = {
                         if (it.length <= maxName) nameProduct.value = it
-                        viewModel.resetErrorInputName()
+                        resetErrorInputName()
                     },
                     label = {
                         Text(text = stringResource(R.string.dialog_save_product_name))
@@ -76,7 +82,8 @@ fun DialogSaveProduct(
                         )
                     }
                 )
-                TextField(value = noteProduct.value,
+                TextField(
+                    value = noteProduct.value,
                     onValueChange = {
                         if (it.length <= maxName) noteProduct.value = it
                     },

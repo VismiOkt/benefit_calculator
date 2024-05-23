@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator
+package com.vismiokt.benefit_calculator.ui
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

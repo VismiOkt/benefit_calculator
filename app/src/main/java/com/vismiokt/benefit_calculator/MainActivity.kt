@@ -9,7 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
-import com.vismiokt.benefit_calculator.ui.theme.BenefitCalculatorApp
+import com.vismiokt.benefit_calculator.ui.BenefitCalculatorApp
 import com.vismiokt.benefit_calculator.ui.theme.BenefitСalculatorTheme
 
 

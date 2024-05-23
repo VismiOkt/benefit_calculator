@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator
+package com.vismiokt.benefit_calculator.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -11,7 +11,8 @@ import com.vismiokt.benefit_calculator.domain.CalculatedData
 import com.vismiokt.benefit_calculator.domain.DeleteAllCalcDataUseCase
 import com.vismiokt.benefit_calculator.domain.GetCalculatedListUseCase
 import com.vismiokt.benefit_calculator.domain.ParseDataDoubleUseCase
-import com.vismiokt.benefit_calculator.ui.theme.CalculatedDataEditState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -28,9 +29,12 @@ class CalculatedDataEditViewModel(
     private val deleteAllCalcDataUseCase = DeleteAllCalcDataUseCase(repository)
 
     private val _calculateData = MutableLiveData<List<CalculatedData>>(listOf())
-//    val calculateData: LiveData<List<CalculatedData>> = _calculateData
 
     private val initialState = CalculatedDataEditState.CalcData(productId, _calculateData)
+
+    private val _uiState = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState
+
 
 
     private val _screenState = MutableLiveData<CalculatedDataEditState>(initialState)
@@ -39,8 +43,12 @@ class CalculatedDataEditViewModel(
     private val _isLastCalculateData = MutableLiveData<Boolean>()
     val isLastCalcData: LiveData<Boolean> = _isLastCalculateData
 
+    init {
+        initialList(productId)
+    }
 
-    fun initialList(productId: Int) {
+
+    private fun initialList(productId: Int) {
         viewModelScope.launch {
             _calculateData.value = getCalculatedListUseCase.getCalculatedList(productId)
             isLastCalculateData()
@@ -68,8 +76,10 @@ class CalculatedDataEditViewModel(
     }
 
     fun calculate(inputPrice: String?, inputWeight: String?, calcD: CalculatedData) {
+        val index = _uiState.value.indicatorTabsState
         val price = parseDataDoubleUseCase.parseData(inputPrice)
-        val weight = parseDataDoubleUseCase.parseData(inputWeight)
+        var weight = parseDataDoubleUseCase.parseData(inputWeight)
+        if (index == 1) weight /= 1000
         val fieldsValid = validateInput(price, weight, calcD)
         getResult(calcD, price, weight, fieldsValid)
         selectBestPrice()

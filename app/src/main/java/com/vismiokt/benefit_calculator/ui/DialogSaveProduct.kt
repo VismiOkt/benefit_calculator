@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator.ui.theme
+package com.vismiokt.benefit_calculator.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,19 +18,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.DialogProperties
-import com.vismiokt.benefit_calculator.ProductViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vismiokt.benefit_calculator.R
-import com.vismiokt.benefit_calculator.domain.Product
+import com.vismiokt.benefit_calculator.domain.CalculatedData
 
 @Composable
-fun DialogEditProduct(
-    product: Product,
-    viewModel: ProductViewModel,
+fun DialogSaveProduct(
     dialogState: MutableState<Boolean>,
-    topAppBarSearch: MutableState<Boolean>
+    calcData: List<CalculatedData>
 ) {
-    val nameProduct = rememberSaveable { mutableStateOf(product.name) }
-    val noteProduct = rememberSaveable { mutableStateOf(product.note) }
+    val viewModel: ProductViewModel = viewModel()
+    val nameProduct = rememberSaveable { mutableStateOf("") }
+    val noteProduct = rememberSaveable { mutableStateOf("") }
     val errorInputName = viewModel.errorInputName.observeAsState(false)
 
     val maxName = 100
@@ -43,12 +42,11 @@ fun DialogEditProduct(
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.editProduct(product, nameProduct.value, noteProduct.value)
-                    topAppBarSearch.value = false
+                    viewModel.addProduct(nameProduct.value, noteProduct.value, calcData)
                     if (!errorInputName.value) dialogState.value = false
                 }
             ) {
-                Text(text = stringResource(R.string.dialog_save_product_save), modifier = Modifier.imePadding())
+                Text(text = stringResource(R.string.dialog_save_product_save))
             }
         },
         dismissButton = {
@@ -58,11 +56,10 @@ fun DialogEditProduct(
         },
         title = {
             Column {
-                Text(text = stringResource(R.string.dialog_edit_product_title_save))
+                Text(text = stringResource(R.string.dialog_save_product_title_save))
                 TextField(
                     value = nameProduct.value,
                     isError = errorInputName.value,
-                    singleLine = true,
                     onValueChange = {
                         if (it.length <= maxName) nameProduct.value = it
                         viewModel.resetErrorInputName()
@@ -78,8 +75,7 @@ fun DialogEditProduct(
                         )
                     }
                 )
-                TextField(
-                    value = noteProduct.value,
+                TextField(value = noteProduct.value,
                     onValueChange = {
                         if (it.length <= maxName) noteProduct.value = it
                     },

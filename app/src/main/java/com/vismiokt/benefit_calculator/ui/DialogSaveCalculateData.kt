@@ -1,4 +1,4 @@
-package com.vismiokt.benefit_calculator.ui.theme
+package com.vismiokt.benefit_calculator.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.imePadding
@@ -8,37 +8,30 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.vismiokt.benefit_calculator.CalculatedDataEditViewModel
 import com.vismiokt.benefit_calculator.R
 
 @Composable
 fun DialogSaveCalculateData(
-    dialogState: MutableState<Boolean>,
-    productId: Int
+    productId: Int,
+    onSaveCalcDataPressed: (Int) -> Unit,
+    onCancelPressed: () -> Unit
 ) {
-    val viewModel: CalculatedDataEditViewModel = viewModel()
-
     AlertDialog(
-        onDismissRequest = { dialogState.value = false },
+        onDismissRequest = { onCancelPressed() },
         properties = DialogProperties(decorFitsSystemWindows = false),
         modifier = Modifier.imePadding().verticalScroll(rememberScrollState()),
         confirmButton = {
             TextButton(
-                onClick = {
-                    viewModel.saveChangesCalculationData(productId)
-                    dialogState.value = false
-                }
+                onClick = { onSaveCalcDataPressed(productId) }
             ) {
                 Text(text = stringResource(R.string.dialog_save_product_save))
             }
         },
         dismissButton = {
-            TextButton(onClick = { dialogState.value = false }) {
+            TextButton(onClick = { onCancelPressed() }) {
                 Text(text = stringResource(R.string.dialog_save_product_cancel))
             }
         },
