@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vismiokt.benefit_calculator.R
 import com.vismiokt.benefit_calculator.domain.CalculatedData
@@ -46,14 +45,34 @@ fun CalculatedDataListEditScreen(
     val screenState = viewModel.screenState.observeAsState(CalculatedDataEditState.Initial)
     val currentState = screenState.value
 
+
     val isLastCalcData = viewModel.isLastCalcData.observeAsState(false)
     val uiState = viewModel.uiState.collectAsState().value
 
     val dialogSaveState = remember { mutableStateOf(false) }
 
+    val calcDataLi = viewModel.calculatedData.observeAsState(listOf())
+
+
     if (currentState is CalculatedDataEditState.CalcData) {
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            FloatingActionButton(
+                modifier = modifier.padding(end = 16.dp),
+                onClick = {
+                    viewModel.addNewCalculateData()
+                }) {
+                Icon(
+                    Icons.Rounded.Add,
+                    contentDescription = stringResource(R.string.home_screen_add_new_calculation)
+                )
+            }
+        }
         CalculatedDataListEdit(
-            currentState.calcData,
+            calcDataLi,
             isLastCalcData = isLastCalcData,
             uiState = uiState,
             deleteCalculateData = { viewModel.deleteCalculateData(it) },
@@ -65,23 +84,9 @@ fun CalculatedDataListEditScreen(
                 )
             },
         )
+
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        FloatingActionButton(
-            modifier = modifier.padding(end = 16.dp),
-            onClick = {
-                viewModel.addNewCalculateData()
-            }) {
-            Icon(
-                Icons.Rounded.Add,
-                contentDescription = stringResource(R.string.home_screen_add_new_calculation)
-            )
-        }
-    }
     BenefitCalculatorAppBar(
         title = productName,
         icon = Icons.AutoMirrored.Outlined.ArrowBack,
@@ -106,15 +111,13 @@ fun CalculatedDataListEditScreen(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CalculatedDataListEdit(
-    calcDataList: LiveData<List<CalculatedData>>,
+    calcDataLi: State<List<CalculatedData>>,
     isLastCalcData: State<Boolean>,
     uiState: UiState,
     deleteCalculateData: (CalculatedData) -> Unit,
     resultCalculate: (String, String, CalculatedData) -> Unit,
 
 ) {
-    val calcDataLi = calcDataList.observeAsState(listOf())
-
     LazyColumn(
         contentPadding = PaddingValues(start = 8.dp, end = 8.dp, top = 70.dp, bottom = 88.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -122,15 +125,12 @@ fun CalculatedDataListEdit(
         items(calcDataLi.value, key = { it.id }) { calcData ->
             val dismissState = rememberSwipeToDismissBoxState(
                 confirmValueChange = {
-                    if (isLastCalcData.value) false
-                    else {
-                        if (it == SwipeToDismissBoxValue.EndToStart) {
-                            deleteCalculateData(calcData)
-                            true
-                        } else false
-                    }
+                    !isLastCalcData.value
                 }
             )
+            if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+                deleteCalculateData(calcData)
+            }
             SwipeToDismissBox(
                 state = dismissState,
                 modifier = Modifier.animateItemPlacement(),

@@ -29,6 +29,7 @@ class CalculatedDataEditViewModel(
     private val deleteAllCalcDataUseCase = DeleteAllCalcDataUseCase(repository)
 
     private val _calculateData = MutableLiveData<List<CalculatedData>>(listOf())
+    val calculatedData: LiveData<List<CalculatedData>> = _calculateData
 
     private val initialState = CalculatedDataEditState.CalcData(productId, _calculateData)
 
@@ -36,12 +37,13 @@ class CalculatedDataEditViewModel(
     val uiState: StateFlow<UiState> = _uiState
 
 
-
     private val _screenState = MutableLiveData<CalculatedDataEditState>(initialState)
     val screenState: LiveData<CalculatedDataEditState> = _screenState
 
     private val _isLastCalculateData = MutableLiveData<Boolean>()
     val isLastCalcData: LiveData<Boolean> = _isLastCalculateData
+
+    private var count: Int = 2
 
     init {
         initialList(productId)
@@ -52,11 +54,18 @@ class CalculatedDataEditViewModel(
         viewModelScope.launch {
             _calculateData.value = getCalculatedListUseCase.getCalculatedList(productId)
             isLastCalculateData()
+            val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
+            count = cD.last().id + 1
         }
 
     }
 
-    private fun getResult(calcD: CalculatedData, price: Double, weight: Double, fieldValid: Boolean) {
+    private fun getResult(
+        calcD: CalculatedData,
+        price: Double,
+        weight: Double,
+        fieldValid: Boolean
+    ) {
         val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
         val newCD = cD.apply {
             replaceAll {
@@ -76,10 +85,8 @@ class CalculatedDataEditViewModel(
     }
 
     fun calculate(inputPrice: String?, inputWeight: String?, calcD: CalculatedData) {
-        val index = _uiState.value.indicatorTabsState
         val price = parseDataDoubleUseCase.parseData(inputPrice)
-        var weight = parseDataDoubleUseCase.parseData(inputWeight)
-        if (index == 1) weight /= 1000
+        val weight = parseDataDoubleUseCase.parseData(inputWeight)
         val fieldsValid = validateInput(price, weight, calcD)
         getResult(calcD, price, weight, fieldsValid)
         selectBestPrice()
@@ -145,10 +152,10 @@ class CalculatedDataEditViewModel(
 
     fun addNewCalculateData() {
         val cD = _calculateData.value?.toMutableList() ?: mutableListOf()
-        val id = cD.last().id
-        cD.add(CalculatedData(id = id + 1))
+        cD.add(CalculatedData(id = count++))
         _calculateData.value = cD
         isLastCalculateData()
+
     }
 
     fun deleteCalculateData(calcD: CalculatedData) {

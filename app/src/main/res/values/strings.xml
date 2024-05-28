@@ -29,7 +29,7 @@
     <string name="about_program_screen_email">vismiokt@mail.ru</string>
     <string name="about_program_screen_email_subject">Отзыв о программе "Калькулятор выгоды"</string>
     <string name="about_program_screen_email_copy">Email скопирован</string>
-    <string name="about_program_screen_version">Версия: 1.0</string>
+    <string name="about_program_screen_version">Версия: 1.1</string>
     <string name="about_program_screen_copy">Номер карты скопирован</string>
     <string name="about_program_screen_card_tinkoff">https://www.tinkoff.ru/rm/strekalova.viktoriya8/57dMQ77598/</string>
     <string name="about_program_screen_card_sberbank">https://www.sberbank.com/sms/pbpn?requisiteNumber=79191931344</string>
