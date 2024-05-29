@@ -135,6 +135,7 @@ fun CalculatedDataListEdit(
                 state = dismissState,
                 modifier = Modifier.animateItemPlacement(),
                 enableDismissFromEndToStart = true,
+                enableDismissFromStartToEnd = false,
                 backgroundContent = {
                     CalcDataSwipeToDismiss()
                 }

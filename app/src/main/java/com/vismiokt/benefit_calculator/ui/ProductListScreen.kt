@@ -139,6 +139,7 @@ fun ProductList(
                 state = dismissState,
                 modifier = Modifier.animateItemPlacement(),
                 enableDismissFromEndToStart = true,
+                enableDismissFromStartToEnd = false,
                 backgroundContent = {
                     Column(
                         horizontalAlignment = Alignment.End,
